@@ -3,917 +3,677 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Health Center - Financial & LTO Planner</title>
-    <meta name="description" content="Detailed DOH LTO requirements checklist (AO 2020-0047), budget and revenue planner for a Super Health Center: Primary Care Facility, Clinical Laboratory and BEmONC Birthing Facility.">
+    <title>Angono SHC Master Planner (PCF, Lab, BEmONC)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background: radial-gradient(circle at top left, #eef2ff 0%, #f8fafc 45%, #f0fdfa 100%); min-height: 100vh; }
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .gantt-scroll::-webkit-scrollbar { height: 8px; }
         .gantt-scroll::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 4px; }
         .gantt-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
-        .gantt-grid { display: grid; grid-template-columns: 280px repeat(12, minmax(45px, 1fr)); gap: 4px; }
-        .bar-fill { transition: width 0.6s cubic-bezier(.4,0,.2,1); }
-        tr.done-row .req-title { text-decoration: line-through; color: #94a3b8; }
-        .cat-row td { position: sticky; top: 0; }
+        .gantt-scroll::-webkit-scrollbar-thumb:hover { background: #64748b; }
+        .gantt-grid { display: grid; grid-template-columns: 260px repeat(12, minmax(50px, 1fr)); gap: 4px; }
+        @media (max-width: 1024px) { .gantt-grid { grid-template-columns: 160px repeat(12, minmax(40px, 1fr)); } }
+        .task-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .task-card.highlighted { transform: scale(1.02); box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.2); border-color: #3b82f6; background-color: #f0f9ff; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Loading Overlay */
+        #sync-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.8); z-index: 100; justify-content: center; align-items: center; flex-direction: column; }
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
-
-    <datalist id="fund-sources">
-        <option value="LGU General Fund"></option>
-        <option value="MOOE"></option>
-        <option value="DOH HFEP"></option>
-        <option value="PhilHealth Income"></option>
-        <option value="SB Supplemental Budget"></option>
-        <option value="N/A"></option>
-    </datalist>
 </head>
 <body class="text-slate-800 antialiased p-4 md:p-8">
 
-    <div class="max-w-7xl mx-auto space-y-6">
+    <div id="sync-overlay">
+        <div class="spinner mb-4"></div>
+        <p class="text-slate-600 font-medium" id="sync-text">Syncing with Google Sheets Database...</p>
+    </div>
 
-        <!-- Header -->
-        <header class="bg-white/90 backdrop-blur rounded-2xl shadow-sm border border-slate-200 p-6">
-            <div class="flex flex-wrap justify-between items-start gap-4">
+    <div class="max-w-[95rem] mx-auto space-y-6">
+        
+        <header class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 -translate-y-1/2 translate-x-1/3"></div>
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 relative z-10">
                 <div>
-                    <h1 class="text-2xl font-bold text-slate-900">Super Health Center Financial & LTO Planner</h1>
-                    <p class="text-slate-500 mt-1">Detailed checklist based on <b>DOH AO 2020-0047</b> (Licensure of Primary Care Facilities) and <b>AO 2012-0012</b> (Classification of Health Facilities).</p>
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Angono Super Health Center</h1>
+                    <p class="text-slate-500 mt-2 text-sm md:text-base max-w-2xl">
+                        Integrated Master Planner for One-Stop Shop (OSS) LTO Licensing: <strong>Primary Care Facility (AO 2020-0047)</strong>, <strong>Secondary Clinical Laboratory (AO 2021-0037)</strong>, & <strong>Birthing Home (BEmONC)</strong>.
+                    </p>
                 </div>
-                <div class="text-right">
-                    <p class="text-xs font-bold text-slate-400 uppercase">Overall LTO Readiness</p>
-                    <p id="hdr-overall-pct" class="text-3xl font-black text-indigo-600">0%</p>
+                <div class="flex flex-col items-end gap-2">
+                    <div class="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg font-semibold text-sm border border-emerald-200 whitespace-nowrap shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Google Sheets Live Sync Active
+                    </div>
+                    <button onclick="forceSave()" class="text-xs text-blue-600 hover:text-blue-800 underline font-medium">Force Save Now</button>
                 </div>
             </div>
 
-            <!-- Navigation Tabs -->
-            <div class="flex flex-wrap gap-2 mt-6 border-b border-slate-200 pb-4">
-                <button onclick="switchTab('tab-general')" id="btn-tab-general" class="px-4 py-2 rounded-lg font-semibold text-sm bg-indigo-600 text-white shadow-sm transition-colors">1. Dashboard & General LTO</button>
-                <button onclick="switchTab('tab-pcf')" id="btn-tab-pcf" class="px-4 py-2 rounded-lg font-semibold text-sm text-slate-600 hover:bg-slate-100 transition-colors">2. PCF / General</button>
-                <button onclick="switchTab('tab-lab')" id="btn-tab-lab" class="px-4 py-2 rounded-lg font-semibold text-sm text-slate-600 hover:bg-slate-100 transition-colors">3. Clinical Laboratory</button>
-                <button onclick="switchTab('tab-bemonc')" id="btn-tab-bemonc" class="px-4 py-2 rounded-lg font-semibold text-sm text-slate-600 hover:bg-slate-100 transition-colors">4. BEmONC (Birthing)</button>
-                <button onclick="switchTab('tab-revenue')" id="btn-tab-revenue" class="px-4 py-2 rounded-lg font-semibold text-sm text-slate-600 hover:bg-slate-100 transition-colors">5. Revenue Projections</button>
+            <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 shadow-inner">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        Total OSS LTO Readiness
+                    </span>
+                    <span id="overall-progress-text" class="text-sm font-black text-blue-700 bg-blue-100 px-3 py-1 rounded-full">0% Completed</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-3.5 overflow-hidden">
+                    <div id="overall-progress-bar" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3.5 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+                </div>
             </div>
         </header>
 
-        <!-- TAB 1: OVERALL DASHBOARD -->
+        <div class="flex flex-wrap border-b border-slate-200 gap-2">
+            <button onclick="switchTab('tab-general')" id="btn-tab-general" class="tab-btn px-6 py-3 font-semibold text-sm rounded-t-xl bg-blue-600 text-white transition-colors">1. General & PCF</button>
+            <button onclick="switchTab('tab-lab')" id="btn-tab-lab" class="tab-btn px-6 py-3 font-semibold text-sm rounded-t-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">2. Secondary Laboratory</button>
+            <button onclick="switchTab('tab-bemonc')" id="btn-tab-bemonc" class="tab-btn px-6 py-3 font-semibold text-sm rounded-t-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">3. Birthing Facility (BEmONC)</button>
+        </div>
+
         <div id="tab-general" class="tab-content active space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <p class="text-xs font-bold text-slate-500 uppercase">Total Required Budget</p>
-                    <h3 id="dash-total-budget" class="text-3xl font-black text-indigo-700 mt-1">₱0</h3>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <p class="text-xs font-bold text-slate-500 uppercase">Total Funded Amount</p>
-                    <h3 id="dash-total-funded" class="text-3xl font-black text-emerald-600 mt-1">₱0</h3>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                    <p class="text-xs font-bold text-slate-500 uppercase">Projected Monthly Revenue</p>
-                    <h3 id="dash-monthly-revenue" class="text-3xl font-black text-blue-600 mt-1">₱0</h3>
-                </div>
-            </div>
-
-            <!-- LTO Readiness per Phase (auto-updates from checkboxes) -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-bold">LTO Readiness per Phase</h2>
-                    <span class="text-xs text-slate-400">Auto-fills as you tick the checkboxes in each tab</span>
-                </div>
-                <div id="dash-readiness" class="grid grid-cols-1 lg:grid-cols-3 gap-6"></div>
-            </div>
-
             
-            <!-- General LTO Requirements -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
+            <main class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-4 md:p-6 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
                     <div>
-                        <h2 class="font-bold text-slate-800">Step-by-Step: General LTO Requirements (All-in-One)</h2>
-                        <p class="text-xs text-slate-500 mt-1">Foundational requirements that apply to the whole Super Health Center.</p>
+                        <h2 class="text-lg font-bold text-slate-800">Master Integration Timeline (12-Month OSS Projection)</h2>
+                        <p class="text-xs text-slate-500 mt-1">Click any colored bar to jump to its specific requirement checklist.</p>
                     </div>
-                    <span class="text-sm font-bold text-indigo-600" id="total-general-cost">₱0</span>
                 </div>
-                <div id="progress-general" class="px-6 pt-5"></div>
-                <div class="p-6 overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
-                            <tr>
-                                <th class="px-4 py-3 w-16">Done</th>
-                                <th class="px-4 py-3">Requirement</th>
-                                <th class="px-4 py-3 w-44">Est. Cost (₱)</th>
-                                <th class="px-4 py-3 w-56">Funding Source</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-general" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                    <button onclick="addRow('general')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Requirement</button>
-                </div>
-            </div>
-
-            <!-- Master Gantt Chart -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden p-6">
-                <h2 class="text-lg font-bold mb-4">High-Level Master Timeline</h2>
-                <div class="overflow-x-auto gantt-scroll">
+                
+                <div class="overflow-x-auto gantt-scroll p-4 md:p-6">
                     <div class="min-w-[900px]">
                         <div class="gantt-grid mb-2 text-xs font-semibold text-slate-400 text-center border-b border-slate-200 pb-2">
-                            <div class="text-left pl-2">Major Phases</div>
+                            <div class="text-left pl-2">Phases & Interventions</div>
                             <div>M1</div><div>M2</div><div>M3</div><div>M4</div><div>M5</div><div>M6</div>
                             <div>M7</div><div>M8</div><div>M9</div><div>M10</div><div>M11</div><div>M12</div>
                         </div>
-                        <div class="gantt-grid items-center py-2"><div class="text-sm font-medium pl-2">Infrastructure & PTC</div><div class="col-start-2 col-end-5 bg-purple-500 h-5 rounded shadow-sm"></div></div>
-                        <div class="gantt-grid items-center py-2"><div class="text-sm font-medium pl-2">Equipment Procurement</div><div class="col-start-4 col-end-8 bg-amber-500 h-5 rounded shadow-sm"></div></div>
-                        <div class="gantt-grid items-center py-2"><div class="text-sm font-medium pl-2">Personnel Hiring</div><div class="col-start-7 col-end-10 bg-teal-500 h-5 rounded shadow-sm"></div></div>
-                        <div class="gantt-grid items-center py-2"><div class="text-sm font-medium pl-2">LTO Application & Launch</div><div class="col-start-10 col-end-12 bg-blue-500 h-5 rounded shadow-sm"></div></div>
+
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="1. SHC Standard Plans & PTC Verification">1. SHC Blueprint & PTC Clear</div>
+                            <div class="col-start-2 col-end-4 bg-blue-500 h-5 rounded shadow-sm cursor-pointer hover:bg-blue-600 relative" onclick="jumpTo('tab-general', 'card-pcf-ptc')"></div>
+                        </div>
+
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="2. Infrastructure Build (HFEP)">2. Infrastructure Build (HFEP)</div>
+                            <div class="col-start-3 col-end-7 bg-slate-400 h-5 rounded shadow-sm relative"></div>
+                        </div>
+
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-6 border-l-2 border-slate-200 truncate" title="Lab Physical Plant (AO 2021-0037)">Lab Plant (AO 2021-0037)</div>
+                            <div class="col-start-4 col-end-7 bg-teal-500 h-3 mt-1 rounded shadow-sm cursor-pointer hover:bg-teal-600 relative" onclick="jumpTo('tab-lab', 'card-lab-plant')"></div>
+                        </div>
+                        
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-6 border-l-2 border-slate-200 truncate" title="Birthing Plant (AO 2012-0012)">BEmONC Plant (AO 2012-0012)</div>
+                            <div class="col-start-4 col-end-7 bg-pink-500 h-3 mt-1 rounded shadow-sm cursor-pointer hover:bg-pink-600 relative" onclick="jumpTo('tab-bemonc', 'card-bem-plant')"></div>
+                        </div>
+
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="3. LGU Procurement & Bidding (Analyzers/Beds)">3. Bidding & Procurement</div>
+                            <div class="col-start-5 col-end-8 bg-purple-500 h-5 rounded shadow-sm relative"></div>
+                        </div>
+
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="4. HR Hiring & Training (Plantilla/JO)">4. HR Hiring & Training</div>
+                            <div class="col-start-6 col-end-10 bg-amber-500 h-5 rounded shadow-sm relative"></div>
+                        </div>
+                        
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-6 border-l-2 border-slate-200 truncate" title="Hire: 4 RMTs & Pathologist">Hire: 4 RMTs & Pathologist</div>
+                            <div class="col-start-7 col-end-10 bg-teal-500 h-3 mt-1 rounded shadow-sm cursor-pointer hover:bg-teal-600 relative" onclick="jumpTo('tab-lab', 'card-lab-hr')"></div>
+                        </div>
+
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-6 border-l-2 border-slate-200 truncate" title="Hire: Midwives & OB">Hire: Midwives & OB</div>
+                            <div class="col-start-7 col-end-10 bg-pink-500 h-3 mt-1 rounded shadow-sm cursor-pointer hover:bg-pink-600 relative" onclick="jumpTo('tab-bemonc', 'card-bem-hr')"></div>
+                        </div>
+
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
+                            <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="5. Draft SOPs & DOH Policies">5. Draft Policies & SOPs</div>
+                            <div class="col-start-8 col-end-11 bg-indigo-500 h-5 rounded shadow-sm cursor-pointer hover:bg-indigo-600 relative" onclick="jumpTo('tab-general', 'card-pcf-policies')"></div>
+                        </div>
+
+                        <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors border-b border-slate-100">
+                            <div class="text-sm font-bold text-slate-800 pl-2 truncate" title="6. OSS LTO Application & CHD Inspection">6. OSS LTO & CHD Inspection</div>
+                            <div class="col-start-11 col-end-13 bg-rose-500 h-5 rounded shadow-sm cursor-pointer hover:bg-rose-600 relative" onclick="jumpTo('tab-general', 'card-pcf-lto')"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- PCF Checklists -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- SHC PTC Verification -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-blue-500" id="card-pcf-ptc">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-slate-900 text-lg">SHC Infrastructure & PTC Verification</h3>
+                        <span class="text-sm font-bold text-blue-600 card-prog-text">0%</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4 pb-3 border-b border-slate-100">DOH HFEP Project Requirements</p>
+                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Verify PTC Status with DOH-HFEP Engineer.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Secure 3 sets of 20"x30" DOH Standard Blueprints.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Sangguniang Bayan (SB) Resolution establishing the PCF.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Certificate of Completion / Turnover documents signed by Mayor.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Health Facility Geographic Form (Location Coordinates).</span></label>
+                    </div>
+                </div>
+
+                <!-- PCF Personnel -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-blue-500" id="card-pcf-hr">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-slate-900 text-lg">PCF Base Personnel</h3>
+                        <span class="text-sm font-bold text-blue-600 card-prog-text">0%</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4 pb-3 border-b border-slate-100">Excluding Lab and BEmONC staff.</p>
+                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Head Physician (Full-time, PRC ID, Primary Care Cert).</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Registered Nurse (Full-time, PRC ID).</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Dentist (PRC ID or valid MOA).</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Sanitation Inspector.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">IT Officer & Records Officer (ICD-10 Training).</span></label>
+                    </div>
+                </div>
+
+                <!-- PCF Exhaustive Policies (AO 2020-0047) -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-indigo-600 lg:col-span-2" id="card-pcf-policies">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-indigo-900 text-lg">EXHAUSTIVE: Primary Care Facility Policies & Manuals (AO 2020-0047)</h3>
+                        <span class="text-sm font-bold text-indigo-600 card-prog-text">0%</span>
+                    </div>
+                    <p class="text-xs text-indigo-700 bg-indigo-50 p-2 rounded mb-4">Required documented policies for the overarching Primary Care Facility. (Check during physical inspection).</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div class="space-y-2">
+                            <p class="text-[11px] font-bold text-slate-500 uppercase">A. Patient Care & Services</p>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Informed Consent prior to procedures.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Patients' Rights and Responsibilities (Visible posting).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Written procedures for Minor Surgeries (Suturing, Circumcision, I&D).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policies for Population-based care (Epidemiologic, Vector Control).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policies for Individual-based care (Maternal, Nutrition, Family Planning).</span></label>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-[11px] font-bold text-slate-500 uppercase">B. Administrative & Network</p>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Written policy on issuance of medical/death certificates.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Patient Navigation & PCPN Referrals.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Supervision policy for Barangay Health Stations (BHS).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-9" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Hiring, Credentialing, and Orientation policies for staff.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-10" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Continuous Quality Improvement (CQI) Program / Customer Survey.</span></label>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-[11px] font-bold text-slate-500 uppercase">C. Information & Environment</p>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-11" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Records retention/disposal policy (per National Archives guidelines).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-12" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Data privacy policy protecting EMR/charts from unauthorized access.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-13" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Building Maintenance Program & Security Arrangements.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-14" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Waste Disposal Management Policies & DENR-hauler Contracts.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-15" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infection Prevention and Control (IPC) Manual (Outbreaks, Needlesticks).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-16" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Reporting of Notifiable Diseases policy (PIDSR).</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LTO OSS Application -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-rose-500 lg:col-span-2" id="card-pcf-lto">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-slate-900 text-lg">One-Stop Shop (OSS) LTO Filing</h3>
+                        <span class="text-sm font-bold text-rose-600 card-prog-text">0%</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Accomplished Application Form & Notarized Acknowledgment.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Fully accomplished Self-Assessment Tools (SAT) for all 3 facilities.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Payment of Official LTO Fees to CHD Cashier.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300"><span class="text-sm font-bold text-emerald-700 peer-checked:line-through peer-checked:text-slate-400">Mandatory 30-Day Rectification of CHD Inspection findings.</span></label>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 2: PCF GENERAL -->
-        <div id="tab-pcf" class="tab-content">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
-                    <div>
-                        <h2 class="font-bold text-slate-800">PCF-Specific Requirements & Budget</h2>
-                        <p class="text-xs text-slate-500 mt-1">Source: AO 2020-0047 (Clinical spaces, equipment, personnel for PCF)</p>
-                    </div>
-                    <span class="text-sm font-bold text-indigo-600" id="total-pcf-cost">₱0</span>
-                </div>
-                <div id="progress-pcf" class="px-6 pt-5"></div>
-                <div class="p-6 overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
-                            <tr>
-                                <th class="px-4 py-3 w-16">Done</th>
-                                <th class="px-4 py-3">Requirement</th>
-                                <th class="px-4 py-3 w-44">Est. Cost (₱)</th>
-                                <th class="px-4 py-3 w-56">Funding Source</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-pcf" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                    <button onclick="addRow('pcf')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Requirement</button>
-                </div>
+        <div id="tab-lab" class="tab-content space-y-6">
+            <div class="bg-teal-50 border border-teal-200 rounded-xl p-6">
+                <h2 class="text-2xl font-bold text-teal-900 mb-2">Secondary Clinical Laboratory Requirements</h2>
+                <p class="text-teal-800 text-sm">Full requirements for PTC and LTO under AO 2021-0037. Automated analyzers are mandatory for secondary classification.</p>
             </div>
 
-            <!-- Services Pricelist -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
-                    <div>
-                        <h2 class="font-bold text-slate-800">Services Pricelist & Projected Revenue</h2>
-                        <p class="text-xs text-slate-500 mt-1">Estimate monthly earnings from these specific services.</p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Lab Plant -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-500" id="card-lab-plant">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-slate-900 text-lg">Physical Plant (AO 2021-0037)</h3>
+                        <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
                     </div>
-                    <span class="text-sm font-bold text-emerald-600" id="total-revenue-pcf">₱0 / month</span>
+                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Min 20 sq. meters for Clinical Work Area.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Dedicated extraction area separate from work area.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Flooring: Seamless and self-coving to 6 inches height.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Plumbing: Stainless steel sink (min 8" depth) & gooseneck faucet.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Proper ventilation/exhaust systems installed per section.</span></label>
+                    </div>
                 </div>
-                <div class="p-6 overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
-                            <tr>
-                                <th class="px-4 py-3">Service Offered</th>
-                                <th class="px-4 py-3 w-40">Price (₱)</th>
-                                <th class="px-4 py-3 w-32 text-center">Vol/Month</th>
-                                <th class="px-4 py-3 w-40 text-right">Subtotal</th>
-                                <th class="px-4 py-3 w-16"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-revenue-pcf" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                    <button onclick="addRevenueRow('pcf')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Service</button>
+
+                <!-- Lab HR -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-500" id="card-lab-hr">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-slate-900 text-lg">Lab Personnel (Min. 4 RMTs)</h3>
+                        <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
+                    </div>
+                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through"><strong>Head Pathologist:</strong> Clinical Pathologist (PSP Cert, PRC, Contract).</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 1 (Microscopy) - Valid PRC, 201 File.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 2 (Hematology) - Valid PRC, 201 File.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 3 (Clinical Chem) - Valid PRC, 201 File.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 4 (Sero/Immuno) - Valid PRC, 201 File.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-6" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Designated Biosafety & Biosecurity Officer.</span></label>
+                    </div>
+                </div>
+                
+                <!-- Lab Exhaustive Policies (AO 2021-0037) -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-700 lg:col-span-2" id="card-lab-policies">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-teal-900 text-lg">EXHAUSTIVE: Clinical Laboratory Policies & Logs (AO 2021-0037)</h3>
+                        <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div class="space-y-2">
+                            <p class="text-[11px] font-bold text-slate-500 uppercase">A. Technical & QA Policies</p>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">SOPs for technical procedures in ALL sections (signed by Pathologist).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Internal Quality Assurance Program (IQAP) and IQC.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Proof of registration/participation in NEQAS (NRLs).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Procedures for receipt and performance of routine/STAT requests.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Procedures for validation and reporting of critical results.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Referral and Outsourcing of Exams (with valid MOA).</span></label>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-[11px] font-bold text-slate-500 uppercase">B. Administrative & Safety</p>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Local Risk Assessment & Biosafety/Biosecurity Protocols.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Contingency plan for equipment breakdown (max 3 months outsourcing).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-9" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Material Safety Data Sheet (MSDS) accessible to all personnel.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-10" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Daily Temperature Logs (Room Temp and Refrigerator Temp).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-11" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Complete Logbooks: Entry, Releasing, Endorsement, Adverse Events.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-12" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on use of digital signatures (E-Commerce Law compliant).</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab Costing Table -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
+                    <h3 class="font-bold text-slate-900 text-xl mb-4">Laboratory Setup Costing (Capital Outlay)</h3>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-sm text-slate-600" id="costing-table">
+                            <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Equipment / Requirement</th>
+                                    <th class="px-4 py-3 text-center w-20">Qty</th>
+                                    <th class="px-4 py-3 text-right w-32">Unit Price</th>
+                                    <th class="px-4 py-3 text-right bg-slate-100 w-36">Total Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100" id="costing-tbody">
+                                <tr class="cost-row">
+                                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none focus:border-teal-500 bg-transparent" value="Automated Chemistry Analyzer"></td>
+                                    <td class="px-4 py-2"><input type="number" id="lab-qty-1" class="w-full text-center border rounded p-1 focus:ring-1 cost-qty" value="1" onchange="calcSetup(); autoSave()"></td>
+                                    <td class="px-4 py-2"><input type="number" id="lab-prc-1" class="w-full text-right border rounded p-1 focus:ring-1 cost-price" value="250000" onchange="calcSetup(); autoSave()"></td>
+                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold item-total">₱0</td>
+                                </tr>
+                                <tr class="cost-row">
+                                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent" value="Automated Hematology Analyzer (CBC)"></td>
+                                    <td class="px-4 py-2"><input type="number" id="lab-qty-2" class="w-full text-center border rounded p-1 cost-qty" value="1" onchange="calcSetup(); autoSave()"></td>
+                                    <td class="px-4 py-2"><input type="number" id="lab-prc-2" class="w-full text-right border rounded p-1 cost-price" value="280000" onchange="calcSetup(); autoSave()"></td>
+                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold item-total">₱0</td>
+                                </tr>
+                                <tr class="cost-row">
+                                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent" value="ISE Electrolyte Analyzer"></td>
+                                    <td class="px-4 py-2"><input type="number" id="lab-qty-3" class="w-full text-center border rounded p-1 cost-qty" value="1" onchange="calcSetup(); autoSave()"></td>
+                                    <td class="px-4 py-2"><input type="number" id="lab-prc-3" class="w-full text-right border rounded p-1 cost-price" value="150000" onchange="calcSetup(); autoSave()"></td>
+                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold item-total">₱0</td>
+                                </tr>
+                                <tr class="cost-row">
+                                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent" value="Binocular Compound Microscope"></td>
+                                    <td class="px-4 py-2"><input type="number" id="lab-qty-4" class="w-full text-center border rounded p-1 cost-qty" value="1" onchange="calcSetup(); autoSave()"></td>
+                                    <td class="px-4 py-2"><input type="number" id="lab-prc-4" class="w-full text-right border rounded p-1 cost-price" value="40000" onchange="calcSetup(); autoSave()"></td>
+                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold item-total">₱0</td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-teal-50 font-bold text-teal-900">
+                                <tr>
+                                    <td colspan="3" class="px-4 py-3 text-right">Total Setup Cost:</td>
+                                    <td class="px-4 py-3 text-right text-lg" id="total-setup-cost">₱0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Lab OPEX -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
+                    <h3 class="font-bold text-slate-900 text-xl mb-4">Laboratory Annual OPEX (Personnel & NEQAS)</h3>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Expense Item</th>
+                                    <th class="px-4 py-3 text-center w-20">Qty/Staff</th>
+                                    <th class="px-4 py-3 text-right w-32">Annual Cost</th>
+                                    <th class="px-4 py-3 text-right bg-slate-100 w-36">Total Annual</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100" id="opex-tbody">
+                                <tr class="opex-row">
+                                    <td class="px-4 py-2">Salaries (4 RMTs @ 30k/mo)</td>
+                                    <td class="px-4 py-2"><input type="number" id="opx-qty-1" class="w-full text-center border rounded p-1 opex-qty" value="4" onchange="calcOpex(); autoSave()"></td>
+                                    <td class="px-4 py-2"><input type="number" id="opx-prc-1" class="w-full text-right border rounded p-1 opex-price" value="360000" onchange="calcOpex(); autoSave()"></td>
+                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold opex-total">₱0</td>
+                                </tr>
+                                <tr class="opex-row">
+                                    <td class="px-4 py-2">Pathologist Retainer</td>
+                                    <td class="px-4 py-2"><input type="number" id="opx-qty-2" class="w-full text-center border rounded p-1 opex-qty" value="1" onchange="calcOpex(); autoSave()"></td>
+                                    <td class="px-4 py-2"><input type="number" id="opx-prc-2" class="w-full text-right border rounded p-1 opex-price" value="180000" onchange="calcOpex(); autoSave()"></td>
+                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold opex-total">₱0</td>
+                                </tr>
+                                <tr class="opex-row">
+                                    <td class="px-4 py-2">NEQAS Registration Fees</td>
+                                    <td class="px-4 py-2"><input type="number" id="opx-qty-3" class="w-full text-center border rounded p-1 opex-qty" value="1" onchange="calcOpex(); autoSave()"></td>
+                                    <td class="px-4 py-2"><input type="number" id="opx-prc-3" class="w-full text-right border rounded p-1 opex-price" value="25000" onchange="calcOpex(); autoSave()"></td>
+                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold opex-total">₱0</td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-purple-50 font-bold text-purple-900">
+                                <tr>
+                                    <td colspan="3" class="px-4 py-3 text-right">Total Annual OPEX:</td>
+                                    <td class="px-4 py-3 text-right text-lg" id="total-opex-cost">₱0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Lab ROI -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
+                    <h3 class="font-bold text-slate-900 text-xl mb-4">Projected Earnings & ROI (Editable)</h3>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Test Item</th>
+                                    <th class="px-4 py-3 text-right w-24">Price</th>
+                                    <th class="px-4 py-3 text-right w-24">Cost</th>
+                                    <th class="px-4 py-3 text-right w-24">Tests/Day</th>
+                                    <th class="px-4 py-3 text-right bg-emerald-50 text-emerald-800">Daily Margin</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100" id="roi-tbody">
+                                <tr class="calc-row"><td class="px-4 py-2">CBC w/ Platelet</td><td class="px-4 py-2"><input type="number" id="roi-p-1" class="price-input w-full text-right border rounded p-1" value="250" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-c-1" class="cost-input w-full text-right border rounded p-1" value="45" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-v-1" class="volume-input w-full text-right border rounded p-1" value="30" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2 text-right font-bold text-emerald-600 bg-emerald-50 daily-margin">₱0</td></tr>
+                                <tr class="calc-row"><td class="px-4 py-2">Routine Urinalysis</td><td class="px-4 py-2"><input type="number" id="roi-p-2" class="price-input w-full text-right border rounded p-1" value="120" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-c-2" class="cost-input w-full text-right border rounded p-1" value="20" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-v-2" class="volume-input w-full text-right border rounded p-1" value="35" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2 text-right font-bold text-emerald-600 bg-emerald-50 daily-margin">₱0</td></tr>
+                                <tr class="calc-row"><td class="px-4 py-2">Fasting Blood Sugar</td><td class="px-4 py-2"><input type="number" id="roi-p-3" class="price-input w-full text-right border rounded p-1" value="180" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-c-3" class="cost-input w-full text-right border rounded p-1" value="25" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-v-3" class="volume-input w-full text-right border rounded p-1" value="20" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2 text-right font-bold text-emerald-600 bg-emerald-50 daily-margin">₱0</td></tr>
+                            </tbody>
+                            <tfoot class="bg-slate-100 font-bold text-slate-800">
+                                <tr><td colspan="4" class="px-4 py-3 text-right">Est. Annual Gross Margin:</td><td class="px-4 py-3 text-right text-emerald-700 text-lg bg-emerald-100" id="total-annual">₱0</td></tr>
+                                <tr><td colspan="4" class="px-4 py-3 text-right">Est. NET Annual (Gross - OPEX):</td><td class="px-4 py-3 text-right text-indigo-900 text-xl bg-indigo-100 border-t-4 border-indigo-200" id="total-net-annual">₱0</td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div></div>
-
-        <!-- TAB 3: LABORATORY -->
-        <div id="tab-lab" class="tab-content">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="p-4 bg-teal-50 border-b border-teal-100 flex flex-wrap justify-between items-center gap-2">
-                    <div>
-                        <h2 class="font-bold text-teal-800">Clinical Laboratory Requirements & Budget</h2>
-                        <p class="text-xs text-teal-600 mt-1">Source: AO 2020-0047 Annex A VI.F (required tests), Annex C1 2.5.1 & C2 1.3.2 (lab spaces). Items marked "i-verify" are standard practice / Lab AO, not in the uploaded files.</p>
-                    </div>
-                    <span class="text-sm font-bold text-teal-700" id="total-lab-cost">₱0</span>
-                </div>
-                <div id="progress-lab" class="px-6 pt-5"></div>
-                <div class="p-6 overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
-                            <tr>
-                                <th class="px-4 py-3 w-16">Done</th>
-                                <th class="px-4 py-3">Requirement</th>
-                                <th class="px-4 py-3 w-44">Est. Cost (₱)</th>
-                                <th class="px-4 py-3 w-56">Funding Source</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-lab" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                    <button onclick="addRow('lab')" class="mt-4 text-sm text-teal-600 font-semibold hover:underline">+ Add Requirement</button>
-                </div>
-            </div>
-
-            <!-- Services Pricelist -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
-                    <div>
-                        <h2 class="font-bold text-slate-800">Services Pricelist & Projected Revenue</h2>
-                        <p class="text-xs text-slate-500 mt-1">Estimate monthly earnings from these specific services.</p>
-                    </div>
-                    <span class="text-sm font-bold text-emerald-600" id="total-revenue-lab">₱0 / month</span>
-                </div>
-                <div class="p-6 overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
-                            <tr>
-                                <th class="px-4 py-3">Service Offered</th>
-                                <th class="px-4 py-3 w-40">Price (₱)</th>
-                                <th class="px-4 py-3 w-32 text-center">Vol/Month</th>
-                                <th class="px-4 py-3 w-40 text-right">Subtotal</th>
-                                <th class="px-4 py-3 w-16"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-revenue-lab" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                    <button onclick="addRevenueRow('lab')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Service</button>
-                </div>
-            </div>
-        </div></div>
-
-        <!-- TAB 4: BEMONC -->
-        <div id="tab-bemonc" class="tab-content">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="p-4 bg-pink-50 border-b border-pink-100 flex flex-wrap justify-between items-center gap-2">
-                    <div>
-                        <h2 class="font-bold text-pink-800">BEmONC (Birthing) Requirements & Budget</h2>
-                        <p class="text-xs text-pink-600 mt-1">Source: AO 2020-0047 Annex C1 2.5.3 & C2 1.3.1 (birthing spaces), Annex B (Maternal & Newborn Care). Items marked "i-verify" follow AO 2016-0042 / BEmONC standards, not in the uploaded files.</p>
-                    </div>
-                    <span class="text-sm font-bold text-pink-700" id="total-bemonc-cost">₱0</span>
-                </div>
-                <div id="progress-bemonc" class="px-6 pt-5"></div>
-                <div class="p-6 overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
-                            <tr>
-                                <th class="px-4 py-3 w-16">Done</th>
-                                <th class="px-4 py-3">Requirement</th>
-                                <th class="px-4 py-3 w-44">Est. Cost (₱)</th>
-                                <th class="px-4 py-3 w-56">Funding Source</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-bemonc" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                    <button onclick="addRow('bemonc')" class="mt-4 text-sm text-pink-600 font-semibold hover:underline">+ Add Requirement</button>
-                </div>
-            </div>
-
-            <!-- Services Pricelist -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
-                    <div>
-                        <h2 class="font-bold text-slate-800">Services Pricelist & Projected Revenue</h2>
-                        <p class="text-xs text-slate-500 mt-1">Estimate monthly earnings from these specific services.</p>
-                    </div>
-                    <span class="text-sm font-bold text-emerald-600" id="total-revenue-bemonc">₱0 / month</span>
-                </div>
-                <div class="p-6 overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
-                            <tr>
-                                <th class="px-4 py-3">Service Offered</th>
-                                <th class="px-4 py-3 w-40">Price (₱)</th>
-                                <th class="px-4 py-3 w-32 text-center">Vol/Month</th>
-                                <th class="px-4 py-3 w-40 text-right">Subtotal</th>
-                                <th class="px-4 py-3 w-16"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-revenue-bemonc" class="divide-y divide-slate-100"></tbody>
-                    </table>
-                    <button onclick="addRevenueRow('bemonc')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Service</button>
-                </div>
-            </div>
-        </div></div>
-
-        <!-- TAB 5: REVENUE PROJECTIONS -->
         </div>
 
-    </div>
+        <div id="tab-bemonc" class="tab-content space-y-6">
+            <div class="bg-pink-50 border border-pink-200 rounded-xl p-6">
+                <h2 class="text-2xl font-bold text-pink-900 mb-2">Birthing Facility (BEmONC) Requirements</h2>
+                <p class="text-pink-800 text-sm">Full requirements for PTC and LTO under AO 2012-0012 for Maternity Care / Lying-in clinics.</p>
+            </div>
 
-    <!-- Status indicator for Database Saves -->
-    <div id="save-status" class="fixed bottom-4 right-4 bg-slate-800 text-white px-4 py-2 rounded-lg shadow-lg text-sm transition-opacity duration-300 opacity-0 pointer-events-none z-50">
-        Saving to database...
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- BEmONC Plant -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-500" id="card-bem-plant">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-slate-900 text-lg">Physical Plant & Equipment</h3>
+                        <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                    </div>
+                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Birthing Room: Min 10.5 sqm per delivery table.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Ward Layout: Min 7.43 sqm per bed.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Dedicated Clean-up, Sterilization, and Scrub-up areas.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Delivery Table with Stirrups & Kelly Pad.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Infant Resuscitator (Ambu bag) & Fetal Doppler/Fetoscope.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-6" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Autoclave (Min 20L) & Emergency Drugs Kit (Oxytocin, MgSO4).</span></label>
+                    </div>
+                </div>
+
+                <!-- BEmONC HR -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-500" id="card-bem-hr">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-slate-900 text-lg">BEmONC Personnel & Linkages</h3>
+                        <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                    </div>
+                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Consulting OB-GYN / Physician (On-call or retainer).</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Midwife 1: BEmONC & EINC Certified, Valid PRC ID.</span></label>
+                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Midwife 2: BEmONC & EINC Certified (for 24/7 rotation).</span></label>
+                    </div>
+                </div>
+
+                <!-- BEmONC Exhaustive Policies -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-700 lg:col-span-2" id="card-bem-policies">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-pink-900 text-lg">EXHAUSTIVE: Birthing Facility Policies & Manuals</h3>
+                        <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div class="space-y-2">
+                            <p class="text-[11px] font-bold text-slate-500 uppercase">A. MOAs & Linkages</p>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Referral Hospital MOA (For C-Section & Complications).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Blood Bank MOA (For emergency blood transfusions).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Transport System MOA / DOH Registered Ambulance.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infectious Waste Hauler MOA (Placenta & Sharps disposal).</span></label>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-[11px] font-bold text-slate-500 uppercase">B. Clinical Protocols</p>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">EINC (Essential Intrapartum and Newborn Care) Protocol Manual.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">BEmONC Emergency Response Protocols.</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Sterilization & Decontamination Logs (Autoclave monitoring).</span></label>
+                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infection Control specific to Delivery and Newborn Ward.</span></label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
 
     <script>
-
-        // GOOGLE SHEETS DATABASE CONFIGURATION
-        const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyRmWIsxBGJQ-8lZWXi_HNyH04MQQjXG9lGYT9GrJSSNzgA2_XE6aHU5F4Nz4oU3IaX/exec";
-
-        const DATA_VERSION = 6;
-
-        function buildSection(prefix, groups) {
-            const out = [];
-            let n = 1;
-            groups.forEach(([cat, items]) => {
-                items.forEach(([title, ref, cost, fund]) => {
-                    out.push({ id: `${prefix}_${n++}`, cat, title, ref: ref || "", cost: cost || 0, fund: fund || (cost ? "" : "N/A"), checked: false });
-                });
-            });
-            return out;
-        }
-
-        const DEFAULT_GENERAL = buildSection("gen", [
-            ["Phase 1 – Pre-Application & Classification", [
-                ["Confirm category as Primary Care Facility (government-owned) under the DOH classification", "AO 2012-0012; AO 2020-0047 Sec. V.C", 0],
-                ["Decide which ancillary services are in-house vs outsourced: Clinical Lab, X-ray, Pharmacy, Birthing, Dental, Ambulance (Type 1)", "AO 2020-0047 Sec. V.H", 0],
-                ["Prepare copies of governing issuances: AO 2020-0047, AO 2018-0016 (One-Stop Shop), AO 2016-0042 (PTC)", "Sec. VI.F", 0],
-                ["Notarized MOA for each OUTSOURCED ancillary service with a DOH/FDA-licensed facility", "Sec. V.K & V.L", 5000, "LGU General Fund"],
-                ["LGU Sangguniang Bayan resolution / proof of ownership & site documents", "Application requirement", 0],
-            ]],
-            ["Phase 2 – DOH Permit to Construct (PTC)", [
-                ["Accomplished DOH-PTC application form submitted to CHD-RLED", "Sec. VII.A.2", 0],
-                ["Floor plans signed & sealed by architect, properly identified and completely labelled", "Annex C2 2.1", 50000, "LGU General Fund"],
-                ["Self-check against the Checklist for Review of Floor Plans (Annex C2)", "Annex C2", 0],
-                ["If already operating before the AO: submit As-Built Plan instead of PTC", "Sec. X.A (Transitory)", 0],
-                ["Floor plan approved by HFERC", "Annex C2 p.3", 0],
-            ]],
-            ["Phase 3 – General Physical Plant & Spaces (All-in-One)", [
-                ["Site accessible by public transport; entrance at grade level, clearly marked", "Annex C1 1.1–1.2", 0],
-                ["Main lobby with reception/information counter", "Annex C1 2.3.1.1", 20000, "DOH HFEP"],
-                ["Waiting area – 1.4 sqm per person; PWD seats, diaper-changing & breastfeeding room", "Annex C1 2.3.1.2", 30000, "DOH HFEP"],
-                ["Public toilets – 1 per 8 patients, separate Male/Female, PWD-accessible", "Annex C1 2.3.1.3", 0],
-                ["Wheelchair storage near entrance", "Annex C1 2.3.1.4", 0],
-                ["Staff office + staff toilet (1 per 15 personnel)", "Annex C1 2.3.2", 0],
-                ["Records storage room & supply storage room", "Annex C1 2.3.3", 15000, "LGU General Fund"],
-                ["Waste holding room/area (segregated infectious & general waste)", "Annex C1 2.6.1", 10000, "LGU General Fund"],
-                ["Janitor's closet with slop sink & housekeeping cabinet", "Annex C1 2.6.2", 8000, "LGU General Fund"],
-                ["Parking – 1 slot per 100 sqm GFA + reserved slot for ambulance/PTV", "Annex C1 1.4", 0],
-                ["PWD ramp – 1.2m clear width, 1:12 slope (BP 344)", "Annex C1 3.2", 0],
-                ["Fire safety – min 2 remote exits per floor ending at open public space (RA 9514)", "Annex C1 4.1", 0],
-                ["Luminous/illuminated EXIT signs & directional signs; rooms labelled", "Annex B #49–50", 10000, "LGU General Fund"],
-                ["Ceiling height – min 2.40m (air-conditioned) / 2.70m (natural)", "Annex C1 4.4", 0],
-                ["Approved water supply + water tank", "Annex C1 4.5", 30000, "LGU General Fund"],
-            ]],
-            ["Phase 4 – General Non-Medical Equipment", [
-                ["Computer/laptop with internet connection", "Annex B Part II", 40000, "LGU General Fund"],
-                ["Printer & Mobile phone", "Annex B Part II", 18000, "LGU General Fund"],
-                ["Fire extinguishers", "Annex B Part II", 10000, "MOOE"],
-                ["Standby generator set (with PM logbook)", "Annex B #38", 250000, "DOH HFEP"],
-                ["Validated Electronic Medical Records (EMR) system", "Annex A VI.B", 100000, "LGU General Fund"],
-            ]],
-            ["Phase 5 – General Personnel", [
-                ["Head of Facility (Physician) - Minimum 1 Full Time", "Annex A I.A", 80000, "MOOE"],
-                ["IT/Information Management Officer - Minimum 1", "Annex B #22", 20000, "MOOE"],
-                ["Records Officer - Minimum 1", "Annex B #23", 18000, "MOOE"],
-                ["Administrative Officer - Minimum 1", "Annex B #24", 20000, "MOOE"],
-                ["Utility Worker - Minimum 1", "Annex B #25", 13000, "MOOE"],
-                ["Hiring & credentialing policy + orientation for new staff", "Annex B #15–16", 0],
-            ]],
-            ["Phase 6 – General Policies & Records", [
-                ["Manual of Operations (SOPs, Manual of Procedures, laws)", "Sec. VI.F", 15000, "MOOE"],
-                ["Patients' rights policy posted + list of services & schedule", "Annex B #1–3", 5000, "MOOE"],
-                ["Organizational chart + Vision/Mission", "Annex B #11–12", 2000, "MOOE"],
-                ["Records management: storage, retention, Data Privacy Act compliance", "Annex B #26–29", 0],
-                ["Contingency plans: equipment breakdown, emergencies, ancillary LTO suspension", "Sec. VI.E", 0],
-                ["QA Program + CQI plan with proof of implementation", "Annex A V", 0],
-                ["Customer satisfaction survey + action on complaints", "Annex B #48", 0],
-            ]],
-            ["Phase 7 – Safety, IPC & Environment", [
-                ["Incident reporting system & safety management plan", "Annex B #32-33", 0],
-                ["Building & equipment maintenance program (PM logbooks)", "Annex B #34-40", 10000, "MOOE"],
-                ["Bacteriological water analysis every 6 months", "Annex B #38", 3000, "MOOE"],
-                ["Waste management P&P, color-coded labelled bins, hauler contract", "Annex B #41", 30000, "MOOE"],
-                ["Infection Prevention & Control (IPC) Manual + handwashing sinks/PPEs", "Annex B #42-44", 15000, "MOOE"],
-                ["Notifiable disease reporting to PIDSR", "Annex B #46", 0],
-                ["Use only FDA-registered drugs & devices", "Sec. VI.G", 0],
-            ]],
-            ["Phase 8 – Final LTO Application (One-Stop Shop)", [
-                ["Self-assessment using Annex B Assessment Tool before inspection", "Sec. VI.B", 0],
-                ["Submit accomplished DOH-LTO application form to CHD-RLED", "Sec. VII.B", 0],
-                ["FDA-CDRRHR Certificate of Compliance for x-ray (if in-house)", "Sec. VII.B table", 0],
-                ["FDA RFO Recommendation Letter / Certificate for pharmacy (if in-house)", "Sec. VII.B table", 0],
-                ["LTO issued (valid 3 years) – post original in conspicuous area", "Sec. VII.C", 0],
-            ]],
-        ]);
-
-        const DEFAULT_PCF = buildSection("pcf", [
-            ["PCF Clinical Spaces", [
-                ["Physician office / consultation room (adjacent to lobby)", "Annex C1 2.4.1", 0],
-                ["Examination room – min 7.43 sqm, handwash sink, writing counter", "Annex C1 2.4.2", 0],
-                ["Minor surgical room – min 12 sqm, handwash station, away from traffic", "Annex C1 2.4.3", 0],
-                ["Sputum collection area – open air, partitions, lavatory/sink", "Annex C1 2.6.3", 15000, "LGU General Fund"],
-            ]],
-            ["PCF Medical Equipment", [
-                ["Autoclave (at least 20L capacity) - Minimum 1", "Annex B Part II", 60000, "DOH HFEP"],
-                ["Sphygmomanometer (BP) with adult & pediatric cuffs - Min 1", "Annex B Part II", 5000, "DOH HFEP"],
-                ["Vaginal Speculum (different sizes S/M/L) - Min 1 set", "Annex B Part II", 6000, "DOH HFEP"],
-                ["Minor Surgical Set (forceps, scissors, needle holder) - Min 1 set", "Annex B Part II", 15000, "DOH HFEP"],
-                ["EENT diagnostic set (ophthalmoscope, otoscope) - Min 1 set", "Annex B Part II", 25000, "DOH HFEP"],
-                ["Examining table, examining light, & emergency light - 1 per room", "Annex B Part II", 25000, "DOH HFEP"],
-                ["Nebulizer, neurologic hammer, clinical thermometer - Min 1 each", "Annex B Part II", 5000, "DOH HFEP"],
-                ["Weighing scales (adult & infant/pediatric) - Min 1 each", "Annex B Part II", 12000, "DOH HFEP"],
-                ["Wheelchair & wheeled stretcher - Minimum 1 each", "Annex B Part II", 33000, "DOH HFEP"],
-                ["Vaccine ref (2-8°C) & vaccine carrier with cold dog - Min 1 each", "Annex B Part II", 60000, "DOH HFEP"],
-                ["Stethoscope - Min 1", "Annex B Part II", 3000, "DOH HFEP"],
-                ["Foot stool, IV stand, Instrument table - Min 1 each", "Annex B Part II", 10000, "DOH HFEP"],
-                ["Snellen's Chart / Visual Acuity Chart - Min 1", "Annex B Part II", 1000, "DOH HFEP"],
-                ["Salter scale & Vaccine carrier thermometer - Min 1 each", "Annex B Part II", 5000, "DOH HFEP"],
-                ["Safety/Sharps collector box - Min 1", "Annex B Part II", 1000, "MOOE"],
-                ["Ambulance Type 1 (own) or MOA with licensed provider", "AO 2018-0001", 0],
-            ]],
-            ["PCF Personnel", [
-                ["Nurse - Minimum 1 Full Time per shift", "Annex B #18", 30000, "MOOE"],
-                ["Midwife - Minimum 1 Full Time per shift", "Annex B #19", 25000, "MOOE"],
-                ["Sanitation Inspector - Minimum 1 (for LGU PCF)", "Annex B #21", 20000, "MOOE"],
-                ["DOH Primary Care Worker certification / trainings for staff", "Annex A I.D", 20000, "DOH HFEP"],
-            ]],
-            ["PCF Policies & Services", [
-                ["Population-based services P&P (health promotion, surveillance, etc.)", "Annex B #4", 0],
-                ["Individual-based services P&P (Maternal, Nutrition, Referrals)", "Annex B #5", 0],
-                ["Minor surgery P&P (suturing, circumcision, I&D, cysts)", "Annex B #6", 0],
-                ["Patient record content: H&P/SOAP, meds, consent, referral notes", "Annex B #9", 0],
-            ]],
-            ["Dental (If in-house)", [
-                ["Dental clinic space – 8.63 sqm per dental chair with sink", "Annex C1 2.5.5", 0],
-                ["Dental unit & chair with compressor", "Annex B Part II", 250000, "DOH HFEP"],
-                ["Dental Unit & chair with compressor, high/low speed handpieces", "Annex B Part II", 250000, "DOH HFEP"],
-                ["Dental prophylaxis instrument set (scalers, curettes, probes)", "Annex B Part II", 20000, "DOH HFEP"],
-                ["Dental instruments (mouth mirror, cotton plier, explorer, spoon excavator) - 1 set", "Annex B Part II", 5000, "DOH HFEP"],
-                ["Basic Dental Surgery Set (Extraction forceps adult/pedo, aspirating syringe, bone file)", "Annex B Part II", 50000, "DOH HFEP"],
-                ["Dental instrument cabinet, table, sterilizer, sharps disposal", "Annex B Part II", 30000, "DOH HFEP"],
-
-                ["Dentist – employed or via MOA", "Annex B #20", 30000, "MOOE"],
-            ]]
-        ]);
-
-        const DEFAULT_LAB = buildSection("lab", [
-            ["Phase 1 – Required PCF Lab Tests (in-house or outsourced via MOA)", [
-                ["Complete Blood Count with platelet count", "Annex A IV.F.1", 0],
-                ["Urinalysis", "Annex A IV.F.2", 0],
-                ["Fecalysis", "Annex A IV.F.3", 0],
-                ["Fecal occult blood test", "Annex A IV.F.4", 0],
-                ["Lipid profile (total cholesterol, HDL, LDL, triglycerides)", "Annex A IV.F.5", 0],
-                ["Fasting blood sugar", "Annex A IV.F.6", 0],
-                ["Oral glucose tolerance test", "Annex A IV.F.7", 0],
-                ["Pap smear", "Annex A IV.F.8", 0],
-                ["Creatinine", "Annex A IV.F.9", 0],
-                ["Blood typing", "Annex A IV.F.10", 0],
-                ["Screening for Hepatitis B, Syphilis & HIV", "Annex A IV.F.11", 0],
-                ["Sputum microscopy or Nucleic Acid Amplification Test (e.g., GeneXpert)", "Annex A IV.F.12", 0],
-                ["Dengue rapid test", "Annex A IV.F.13", 0],
-                ["Endemic-area tests if applicable (Kato-Katz, malaria/filaria smear, slit-skin smear, RPR)", "Annex A IV.G", 0],
-                ["MOA with DOH-licensed lab for any test NOT done in-house", "Sec. V.K; Annex A IV.F", 5000, "LGU General Fund"],
-            ]],
-            ["Phase 2 – Laboratory Spaces", [
-                ["Extraction area – separate from clinical work area", "Annex C1 2.5.1.1; C2 1.3.2.2", 0],
-                ["Clinical work area with sink – min 20 sqm", "Annex C1 2.5.1.2; C2 1.3.2.1", 0],
-                ["Pathologist area (separate room or within work area)", "Annex C1 2.5.1.3", 0],
-                ["Access to toilet + reception/waiting area", "Annex C1 2.5.1.4", 0],
-                ["Located next to X-ray, no unrelated traffic through the lab", "Annex C1 3.11–3.12", 0],
-                ["Artificial ventilation/HVAC; fire-rated, washable, moisture-resistant walls near sinks", "Annex C1 4.4, 4.7", 0],
-                ["Lab counters, cabinets & stainless sink", "i-verify", 60000, "DOH HFEP"],
-            ]],
-            ["Phase 3 – Laboratory Equipment", [
-                ["Binocular microscope - Minimum 1 unit", "i-verify", 60000, "DOH HFEP"],
-                ["Clinical centrifuge & microhematocrit centrifuge - 1 each", "i-verify", 55000, "DOH HFEP"],
-                ["Automated Hematology Analyzer (for CBC) - Minimum 1 unit", "i-verify", 250000, "DOH HFEP"],
-                ["Chemistry Analyzer (Automated/Semi-auto) - Minimum 1 unit", "i-verify", 350000, "DOH HFEP"],
-                ["Laboratory refrigerator for reagents & kits (with temp log)", "i-verify", 30000, "DOH HFEP"],
-                ["Extraction chair, tourniquets, timers, pipettes & glassware", "i-verify", 25000, "DOH HFEP"],
-                ["Initial stock of reagents, RDT kits & consumables", "i-verify", 80000, "MOOE"],
-            ]],
-            ["Phase 4 – Laboratory Personnel", [
-                ["Head of Lab (Pathologist) - Minimum 1 Retainer/Part-time", "i-verify", 15000, "MOOE"],
-                ["Registered Medical Technologist - Min 1 Full Time per shift", "i-verify", 100000, "MOOE"],
-            ]],
-            ["Phase 5 – Quality, Safety & Records", [
-                ["Lab manual / SOPs for all tests offered", "Annex A IV.H–I", 5000, "MOOE"],
-                ["Internal quality control + External Quality Assessment (NEQAS) enrolment", "i-verify", 10000, "MOOE"],
-                ["Biosafety & infectious waste handling (sharps, specimens)", "Annex A VII.B", 0],
-                ["Result releasing & records system compliant with Data Privacy Act", "Annex A VI", 0],
-            ]],
-            ["Phase 6 – Licensing", [
-                ["Lab included in PCF LTO via One-Stop Shop (owned & inside the premises)", "Sec. V.J", 0],
-                ["DOH LTO application fee – Lab (verify current schedule)", "Sec. VII.D", 5000, "LGU General Fund"],
-            ]],
-        ]);
-
-        const DEFAULT_BEMONC = buildSection("bem", [
-            ["Phase 1 – Birthing Area Spaces", [
-                ["Birthing room – 10.5 sqm per birthing table", "Annex C2 1.3.1.1", 0],
-                ["Ward / recovery – 7.43 sqm per bed", "Annex C2 1.3.1.2", 0],
-                ["Clean-up & sterilization room", "Annex C2 1.3.1.3", 0],
-                ["Scrub-up area", "Annex C2 1.3.1.4", 0],
-                ["Toilet for birthing area", "Annex C2 1.3.1.5", 0],
-                ["Away from main traffic; access limited to authorized staff & patients", "Annex C1 3.10", 0],
-                ["Full-height walls for privacy; windows with sill min 1.60m", "Annex C1 4.7–4.8", 0],
-            ]],
-            ["Phase 2 – Birthing & Newborn Equipment", [
-                ["Delivery table with stirrups - Minimum 1 per delivery room", "i-verify", 45000, "DOH HFEP"],
-                ["Infant resuscitator (BVM) & oxygen tanks with regulator - Min 1 set", "i-verify", 30000, "DOH HFEP"],
-                ["Autoclave sterilizer (20L) for birthing - Minimum 1 unit", "i-verify", 25000, "DOH HFEP"],
-                ["Radiant warmer for newborn care - Minimum 1 unit", "i-verify", 80000, "DOH HFEP"],
-                ["Suction apparatus (adult & neonatal)", "i-verify", 15000, "DOH HFEP"],
-                ["Delivery sets (cord clamps, scissors) & episiotomy/repair sets", "i-verify", 18000, "DOH HFEP"],
-                ["Fetal doppler, BP apparatus, newborn weighing scale", "i-verify", 15000, "DOH HFEP"],
-                ["Vacuum extractor & MVA kit (retained products)", "i-verify", 20000, "DOH HFEP"],
-                ["Ward beds with mattresses (at least 2)", "i-verify", 30000, "DOH HFEP"],
-                ["Emergency drugs: oxytocin, MgSO4, IV fluids", "i-verify", 10000, "MOOE"],
-            ]],
-            ["Phase 3 – Birthing Personnel", [
-                ["BEmONC-trained team (Physician, Nurse, Midwife) - At least 1 team", "i-verify", 45000, "DOH HFEP"],
-                ["Midwives - At least 3 (for 24/7 shifting schedule)", "Annex B #19", 60000, "MOOE"],
-                ["Essential Intrapartum & Newborn Care (EINC) training", "i-verify", 10000, "DOH HFEP"],
-            ]],
-            ["Phase 4 – Policies, Referral & Records", [
-                ["Maternal & Newborn Care policies and procedures", "Annex B #5", 0],
-                ["Family Planning services P&P", "Annex B #5", 0],
-                ["Referral MOA with CEmONC-capable hospital + transport arrangement", "Annex B #8", 0],
-                ["Informed consent forms for delivery & procedures", "Annex B #1", 1000, "MOOE"],
-                ["Partograph & delivery/newborn logbooks", "Annex A VI.D", 1000, "MOOE"],
-            ]],
-            ["Phase 5 – Licensing & Accreditation", [
-                ["Birthing services included in PCF LTO via One-Stop Shop", "Sec. V.J", 0],
-                ["PhilHealth accreditation for Maternity & Newborn Care packages", "Sec. V.E–F", 0],
-                ["Newborn screening & hearing screening facility accreditation", "i-verify", 5000, "LGU General Fund"],
-            ]],
-        ]);
-
-        const DEFAULT_REVENUE = [
-            { id: "rev_1", section: "bemonc", service: "Normal Delivery (PhilHealth MCP)", price: 8000, volume: 20 },
-            { id: "rev_2", section: "pcf", service: "Primary Care Consultation", price: 300, volume: 500 },
-            { id: "rev_3", section: "lab", service: "CBC with Platelet Count", price: 250, volume: 300 },
-            { id: "rev_4", section: "lab", service: "Urinalysis", price: 100, volume: 300 },
-            { id: "rev_5", section: "lab", service: "Fasting Blood Sugar", price: 150, volume: 200 }
-        ];
-
-        const SECTIONS = ['general', 'pcf', 'lab', 'bemonc'];
-        const DEFAULTS = { general: DEFAULT_GENERAL, pcf: DEFAULT_PCF, lab: DEFAULT_LAB, bemonc: DEFAULT_BEMONC };
-        const SECTION_LABELS = { general: "Dashboard & General", pcf: "PCF-Specific", lab: "Clinical Laboratory", bemonc: "BEmONC (Birthing)" };
-        const SECTION_COLORS = { general: "bg-purple-500", pcf: "bg-indigo-500", lab: "bg-teal-500", bemonc: "bg-pink-500" };
-
-        const clone = (o) => JSON.parse(JSON.stringify(o));
-
-        let appData = {
-            version: DATA_VERSION,
-            general: clone(DEFAULT_GENERAL),
-            pcf: clone(DEFAULT_PCF),
-            lab: clone(DEFAULT_LAB),
-            bemonc: clone(DEFAULT_BEMONC),
-            revenue: clone(DEFAULT_REVENUE)
-        };
-
-        const fmt = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP', minimumFractionDigits: 0 });
-        const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const formatter = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' });
+        
+        // Google Apps Script Web App URL
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbyRmWIsxBGJQ-8lZWXi_HNyH04MQQjXG9lGYT9GrJSSNzgA2_XE6aHU5F4Nz4oU3IaX/exec";
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('header button').forEach(el => {
-                el.classList.remove('bg-indigo-600', 'text-white');
-                el.classList.add('text-slate-600', 'hover:bg-slate-100');
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-blue-600', 'text-white');
+                el.classList.add('bg-slate-100', 'text-slate-600');
             });
             document.getElementById(tabId).classList.add('active');
-
-            const btn = document.getElementById('btn-' + tabId);
-            btn.classList.remove('text-slate-600', 'hover:bg-slate-100');
-            btn.classList.add('bg-indigo-600', 'text-white');
-        }
-
-        function groupItems(section) {
-            const groups = [];
-            const map = {};
-            appData[section].forEach((item, idx) => {
-                const cat = item.cat || "Custom Items";
-                if (!map[cat]) { map[cat] = []; groups.push([cat, map[cat]]); }
-                map[cat].push({ item, idx });
-            });
-            return groups;
-        }
-
-        function progressBar(done, total, color) {
-            const pct = total ? Math.round(done / total * 100) : 0;
-            return `<div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden"><div class="bar-fill h-2.5 rounded-full ${color}" style="width:${pct}%"></div></div>`;
-        }
-
-        function renderTables() {
-            SECTIONS.forEach(section => {
-                const tbody = document.getElementById(`tbody-${section}`);
-                if(!tbody) return;
-                tbody.innerHTML = '';
-                let totalCost = 0, doneCount = 0;
-                const total = appData[section].length;
-
-                groupItems(section).forEach(([cat, rows]) => {
-                    const catDone = rows.filter(r => r.item.checked).length;
-                    const catCost = rows.reduce((s, r) => s + (parseFloat(r.item.cost) || 0), 0);
-                    const head = document.createElement('tr');
-                    head.className = "cat-row";
-                    head.innerHTML = `
-                        <td colspan="4" class="px-4 py-3 bg-slate-100/80">
-                            <div class="flex flex-wrap items-center justify-between gap-3">
-                                <span class="font-bold text-slate-700">${esc(cat)}</span>
-                                <div class="flex items-center gap-3 text-xs text-slate-500">
-                                    <span>${fmt.format(catCost)}</span>
-                                    <div class="w-28">${progressBar(catDone, rows.length, SECTION_COLORS[section])}</div>
-                                    <span class="font-semibold">${catDone}/${rows.length}</span>
-                                </div>
-                            </div>
-                        </td>`;
-                    tbody.appendChild(head);
-
-                    rows.forEach(({ item, idx }) => {
-                        totalCost += parseFloat(item.cost) || 0;
-                        if (item.checked) doneCount++;
-                        const tr = document.createElement('tr');
-                        tr.className = "hover:bg-slate-50 align-top" + (item.checked ? " done-row" : "");
-                        tr.innerHTML = `
-                            <td class="px-4 py-3"><input type="checkbox" ${item.checked ? 'checked' : ''} onchange="updateData('${section}', ${idx}, 'checked', this.checked)" class="w-4 h-4 mt-1 rounded border-slate-300 text-indigo-600 cursor-pointer"></td>
-                            <td class="px-4 py-3">
-                                <input type="text" value="${esc(item.title)}" onchange="updateData('${section}', ${idx}, 'title', this.value)" class="req-title w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none transition-colors">
-                                ${item.ref ? `<div class="text-[11px] text-slate-400 mt-0.5">📄 ${esc(item.ref)}</div>` : ''}
-                            </td>
-                            <td class="px-4 py-3"><div class="flex items-center">₱<input type="number" value="${esc(item.cost)}" onchange="updateData('${section}', ${idx}, 'cost', this.value)" class="w-full ml-1 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none text-right font-medium text-slate-700"></div></td>
-                            <td class="px-4 py-3">
-                                <div class="flex gap-2 items-center">
-                                    <input list="fund-sources" type="text" value="${esc(item.fund)}" placeholder="Select or type fund..." onchange="updateData('${section}', ${idx}, 'fund', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none text-sm">
-                                    <button onclick="removeRow('${section}', ${idx})" class="text-red-400 hover:text-red-600 font-bold" title="Delete Row">×</button>
-                                </div>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                });
-
-                document.getElementById(`total-${section}-cost`).textContent = fmt.format(totalCost);
-                const pct = total ? Math.round(doneCount / total * 100) : 0;
-                document.getElementById(`progress-${section}`).innerHTML = `
-                    <div class="flex justify-between text-xs font-semibold text-slate-500 mb-1">
-                        <span>LTO Readiness – ${doneCount} of ${total} requirements done</span><span>${pct}%</span>
-                    </div>
-                    ${progressBar(doneCount, total, SECTION_COLORS[section])}`;
-            });
-
-            let totalRevAll = 0;
-            ['pcf', 'lab', 'bemonc'].forEach(sec => {
-                const tbodyRev = document.getElementById('tbody-revenue-' + sec);
-                if (!tbodyRev) return;
-                tbodyRev.innerHTML = '';
-                let totalRevSec = 0;
-                appData.revenue.forEach((item, idx) => {
-                    if(item.section !== sec) return;
-                    const subTotal = (parseFloat(item.price)||0) * (parseInt(item.volume)||0);
-                    totalRevSec += subTotal;
-                    totalRevAll += subTotal;
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-50";
-                    tr.innerHTML = `
-                        <td class="px-4 py-3"><input type="text" value="${esc(item.service)}" onchange="updateData('revenue', ${idx}, 'service', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none font-medium"></td>
-                        <td class="px-4 py-3"><div class="flex items-center">₱<input type="number" value="${esc(item.price)}" onchange="updateData('revenue', ${idx}, 'price', this.value)" class="w-full ml-1 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none text-right"></div></td>
-                        <td class="px-4 py-3"><input type="number" value="${esc(item.volume)}" onchange="updateData('revenue', ${idx}, 'volume', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none text-center"></td>
-                        <td class="px-4 py-3 text-right font-bold text-emerald-600">${fmt.format(subTotal)}</td>
-                        <td class="px-4 py-3 text-right"><button onclick="removeRow('revenue', ${idx})" class="text-red-400 hover:text-red-600 font-bold px-2">×</button></td>
-                    `;
-                    tbodyRev.appendChild(tr);
-                });
-                document.getElementById('total-revenue-' + sec).textContent = fmt.format(totalRevSec) + ' / month';
-            });
-
-            updateDashboard();
-        }
-
-        function updateDashboard() {
-            let grandTotal = 0;
-            let fundedTotal = 0;
-            let allDone = 0, allTotal = 0;
-
-            SECTIONS.forEach(section => {
-                appData[section].forEach(item => {
-                    grandTotal += parseFloat(item.cost) || 0;
-                    const fundStr = (item.fund || "").toLowerCase().trim();
-                    if(fundStr !== "" && fundStr !== "none" && fundStr !== "n/a") {
-                        fundedTotal += parseFloat(item.cost) || 0;
-                    }
-                    allTotal++;
-                    if (item.checked) allDone++;
-                });
-            });
-
-            let totalRev = 0;
-            appData.revenue.forEach(item => {
-                totalRev += (parseFloat(item.price)||0) * (parseInt(item.volume)||0);
-            });
-
-            document.getElementById('dash-total-budget').textContent = fmt.format(grandTotal);
-            document.getElementById('dash-total-funded').textContent = fmt.format(fundedTotal);
-            document.getElementById('dash-monthly-revenue').textContent = fmt.format(totalRev);
-            document.getElementById('hdr-overall-pct').textContent = (allTotal ? Math.round(allDone / allTotal * 100) : 0) + '%';
-
-            document.getElementById('dash-readiness').innerHTML = SECTIONS.map(section => {
-                const items = appData[section];
-                const done = items.filter(i => i.checked).length;
-                const pct = items.length ? Math.round(done / items.length * 100) : 0;
-                
-                // Show at most 3 top categories to not clutter the dashboard
-                const phases = groupItems(section).slice(0, 3).map(([cat, rows]) => {
-                    const d = rows.filter(r => r.item.checked).length;
-                    const p = Math.round(d / rows.length * 100);
-                    return `<div>
-                        <div class="flex justify-between text-[11px] text-slate-500 mb-0.5"><span class="truncate pr-2" title="${esc(cat)}">${esc(cat)}</span><span>${p}%</span></div>
-                        ${progressBar(d, rows.length, SECTION_COLORS[section])}
-                    </div>`;
-                }).join('');
-                
-                return `<div class="border border-slate-100 rounded-xl p-4 bg-slate-50/50">
-                    <div class="flex justify-between items-baseline mb-3">
-                        <h3 class="font-bold text-slate-700">${SECTION_LABELS[section]}</h3>
-                        <span class="text-xl font-black text-slate-800">${pct}%</span>
-                    </div>
-                    <div class="space-y-2">${phases}</div>
-                </div>`;
-            }).join('');
-        }
-
-        function updateData(section, idx, field, value) {
-            appData[section][idx][field] = value;
-            renderTables();
-            triggerSave();
-        }
-
-        function addRow(section) {
-            const id = Math.random().toString(36).substr(2, 9);
-            appData[section].push({ id: id, cat: "Custom Items", title: "New Requirement", ref: "", cost: 0, fund: "", checked: false });
-            renderTables();
-            triggerSave();
-        }
-
-        function addRevenueRow(section) {
-            const id = Math.random().toString(36).substr(2, 9);
-            appData.revenue.push({ id: id, section: section, service: "New Service", price: 0, volume: 0 });
-            renderTables();
-            triggerSave();
-        }
-
-        function removeRow(section, idx) {
-            if(confirm("Are you sure you want to remove this item?")) {
-                appData[section].splice(idx, 1);
-                renderTables();
-                triggerSave();
-            }
-        }
-
-        function serialize() {
-            const out = { version: DATA_VERSION, revenue: appData.revenue };
-            SECTIONS.forEach(section => {
-                const defMap = {};
-                DEFAULTS[section].forEach(d => defMap[d.id] = d);
-                out[section] = appData[section].map(item => {
-                    const d = defMap[item.id];
-                    const o = { id: item.id, cost: item.cost, fund: item.fund, checked: item.checked };
-                    if (!d || d.title !== item.title) o.title = item.title;
-                    if (!d || d.cat !== item.cat) o.cat = item.cat;
-                    if (!d || d.ref !== item.ref) o.ref = item.ref;
-                    return o;
-                });
-            });
-            return out;
-        }
-
-        function hydrate(data) {
-            const result = { version: DATA_VERSION, revenue: (data.revenue || clone(DEFAULT_REVENUE)).map(r => ({...r, section: r.section || "pcf"})) };
-            SECTIONS.forEach(section => {
-                const defMap = {};
-                DEFAULTS[section].forEach(d => defMap[d.id] = d);
-                result[section] = (data[section] || []).map(item => {
-                    const d = defMap[item.id] || {};
-                    return {
-                        id: item.id,
-                        cat: item.cat ?? d.cat ?? "Custom Items",
-                        title: item.title ?? d.title ?? "",
-                        ref: item.ref ?? d.ref ?? "",
-                        cost: item.cost ?? d.cost ?? 0,
-                        fund: item.fund ?? d.fund ?? "",
-                        checked: !!item.checked
-                    };
-                });
-            });
-            return result;
-        }
-
-        function migrateFromV2(old) {
-            // Version 2 didn't have 'general', so it was all in 'pcf'.
-            const result = { version: DATA_VERSION, general: clone(DEFAULT_GENERAL), pcf: clone(DEFAULT_PCF), lab: clone(DEFAULT_LAB), bemonc: clone(DEFAULT_BEMONC), revenue: (old.revenue || clone(DEFAULT_REVENUE)).map(r => ({...r, section: r.section || "pcf"})) };
             
-            if (old.pcf) {
-                // Map over old PCF items to preserve checked status or customizations
-                const generalTitles = new Set(DEFAULT_GENERAL.map(i => i.title));
-                const pcfTitles = new Set(DEFAULT_PCF.map(i => i.title));
+            let btnId = 'btn-' + tabId;
+            document.getElementById(btnId).classList.remove('bg-slate-100', 'text-slate-600');
+            document.getElementById(btnId).classList.add('bg-blue-600', 'text-white');
+        }
+
+        function jumpTo(tabId, cardId) {
+            switchTab(tabId);
+            setTimeout(() => {
+                const card = document.getElementById(cardId);
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.classList.add('highlighted');
+                    setTimeout(() => card.classList.remove('highlighted'), 2000);
+                }
+            }, 100);
+        }
+
+        function updateProgressUI() {
+            let totalChecks = 0;
+            let checkedCount = 0;
+
+            document.querySelectorAll('.task-card').forEach((card) => {
+                const subChecks = card.querySelectorAll('.sub-check');
+                const cardProgText = card.querySelector('.card-prog-text');
                 
-                old.pcf.forEach(item => {
-                    let targetSection = 'pcf';
-                    let found = false;
-                    
-                    // Try to map to new general defaults
-                    let match = result.general.find(i => i.title === item.title);
-                    if(match) { match.checked = item.checked; match.cost = item.cost; match.fund = item.fund; found = true; }
-                    
-                    if(!found) {
-                        match = result.pcf.find(i => i.title === item.title);
-                        if(match) { match.checked = item.checked; match.cost = item.cost; match.fund = item.fund; found = true; }
-                    }
-                    
-                    if(!found && item.title) {
-                        // Keep custom item in PCF
-                        result.pcf.push({
-                            id: "custom_" + Math.random().toString(36).substr(2, 9),
-                            cat: "Custom Items (from old version)",
-                            title: item.title,
-                            ref: item.ref || "",
-                            cost: item.cost || 0,
-                            fund: item.fund || "",
-                            checked: !!item.checked
-                        });
-                    }
+                let cardTotal = subChecks.length;
+                let cardChecked = 0;
+                
+                subChecks.forEach(chk => {
+                    totalChecks++;
+                    if (chk.checked) { checkedCount++; cardChecked++; }
                 });
-            }
-            // Same logic for lab & bemonc (they didn't split, just hydrate their checked states)
-            ['lab', 'bemonc'].forEach(section => {
-                if(old[section]) {
-                    old[section].forEach(item => {
-                        let match = result[section].find(i => i.title === item.title);
-                        if(match) { match.checked = item.checked; match.cost = item.cost; match.fund = item.fund; }
-                        else if (item.title) {
-                            result[section].push({
-                                id: "custom_" + Math.random().toString(36).substr(2, 9),
-                                cat: "Custom Items",
-                                title: item.title,
-                                ref: item.ref || "",
-                                cost: item.cost || 0,
-                                fund: item.fund || "",
-                                checked: !!item.checked
-                            });
-                        }
-                    });
+
+                if (cardTotal > 0 && cardProgText) {
+                    cardProgText.textContent = Math.round((cardChecked / cardTotal) * 100) + '%';
                 }
             });
-            return result;
+
+            let overallPct = totalChecks > 0 ? Math.round((checkedCount / totalChecks) * 100) : 0;
+            document.getElementById('overall-progress-bar').style.width = overallPct + '%';
+            document.getElementById('overall-progress-text').textContent = overallPct + '% Completed';
         }
 
+        // --- Calculation Functions ---
+        function calcSetup() {
+            let total = 0;
+            document.querySelectorAll('.cost-row').forEach(row => {
+                const q = parseFloat(row.querySelector('.cost-qty').value) || 0;
+                const p = parseFloat(row.querySelector('.cost-price').value) || 0;
+                row.querySelector('.item-total').textContent = formatter.format(q * p);
+                total += (q * p);
+            });
+            document.getElementById('total-setup-cost').textContent = formatter.format(total);
+        }
+
+        function calcOpex() {
+            let total = 0;
+            document.querySelectorAll('.opex-row').forEach(row => {
+                const q = parseFloat(row.querySelector('.opex-qty').value) || 0;
+                const p = parseFloat(row.querySelector('.opex-price').value) || 0;
+                row.querySelector('.opex-total').textContent = formatter.format(q * p);
+                total += (q * p);
+            });
+            document.getElementById('total-opex-cost').textContent = formatter.format(total);
+            calcROI(); 
+        }
+
+        function calcROI() {
+            let dailyTotal = 0;
+            document.querySelectorAll('.calc-row').forEach(row => {
+                const p = parseFloat(row.querySelector('.price-input').value) || 0;
+                const c = parseFloat(row.querySelector('.cost-input').value) || 0;
+                const v = parseFloat(row.querySelector('.volume-input').value) || 0;
+                const margin = (p - c) * v;
+                row.querySelector('.daily-margin').textContent = formatter.format(margin);
+                dailyTotal += margin;
+            });
+            
+            const annualGross = dailyTotal * 22 * 12;
+            document.getElementById('total-annual').textContent = formatter.format(annualGross);
+            
+            let opexTotal = 0;
+            document.querySelectorAll('.opex-row').forEach(row => {
+                opexTotal += (parseFloat(row.querySelector('.opex-qty').value) || 0) * (parseFloat(row.querySelector('.opex-price').value) || 0);
+            });
+            
+            document.getElementById('total-net-annual').textContent = formatter.format(annualGross - opexTotal);
+        }
+
+        // --- Google Sheets Sync Logic ---
         let saveTimeout;
-        function triggerSave() {
-            const statusEl = document.getElementById('save-status');
-            statusEl.textContent = 'Saving to database...';
-            statusEl.style.opacity = '1';
 
+        function autoSave() {
+            updateProgressUI();
+            // Debounce saving so we don't spam the Apps Script URL
             clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => {
-                fetch(GOOGLE_SHEETS_API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(serialize())
-                })
-                .then(res => res.json())
-                .then(() => {
-                    statusEl.textContent = 'Saved to Google Sheets!';
-                    setTimeout(() => { statusEl.style.opacity = '0'; }, 2000);
-                })
-                .catch(err => {
-                    statusEl.textContent = 'Error saving.';
-                    setTimeout(() => { statusEl.style.opacity = '0'; }, 2000);
-                });
-            }, 1000);
+            saveTimeout = setTimeout(forceSave, 1500); 
         }
 
-        function loadFromDatabase() {
-            const statusEl = document.getElementById('save-status');
-            statusEl.textContent = 'Loading data...';
-            statusEl.style.opacity = '1';
+        async function forceSave() {
+            const overlay = document.getElementById('sync-overlay');
+            overlay.style.display = 'flex';
+            
+            // Build JSON payload
+            const payload = {
+                checkboxes: {},
+                inputs: {}
+            };
 
-            fetch(GOOGLE_SHEETS_API_URL)
-                .then(res => res.json())
-                .then(data => {
-                    if (typeof data === "string") {
-                        try { data = JSON.parse(data); } catch(e) { data = null; }
-                    }
-                    let migrated = false;
-                    if (data) {
-                        if (data.version === DATA_VERSION) {
-                            appData = hydrate(data);
-                        } else {
-                            appData = migrateFromV2(data); // Migrates v2/v1 -> v3
-                            migrated = true;
+            // Grab all checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+                if(chk.id) payload.checkboxes[chk.id] = chk.checked;
+            });
+
+            // Grab all number inputs (costing, opex, ROI)
+            document.querySelectorAll('input[type="number"], input[type="text"]').forEach(inp => {
+                if(inp.id) payload.inputs[inp.id] = inp.value;
+            });
+
+            try {
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Needed because simple GAS web apps don't handle preflight CORS well by default without specific headers. no-cors sends data but we can't read response.
+                    headers: { 'Content-Type': 'text/plain' }, // Send as plain text so GAS doPost(e) easily reads e.postData.contents
+                    body: JSON.stringify(payload)
+                });
+                console.log('Saved to Google Sheets.');
+            } catch (err) {
+                console.error("Sync failed:", err);
+            } finally {
+                setTimeout(() => { overlay.style.display = 'none'; }, 500);
+            }
+        }
+
+        async function loadData() {
+            try {
+                const response = await fetch(GAS_URL);
+                const rawData = await response.text();
+                
+                if(rawData && rawData.trim() !== "") {
+                    const data = JSON.parse(rawData);
+                    
+                    // Restore Checkboxes
+                    if(data.checkboxes) {
+                        for(const [id, isChecked] of Object.entries(data.checkboxes)) {
+                            const el = document.getElementById(id);
+                            if(el) el.checked = isChecked;
                         }
                     }
-                    renderTables();
-                    if (migrated) triggerSave();
-                    statusEl.textContent = migrated ? 'Upgraded to new Dashboard structure!' : 'Database loaded!';
-                    setTimeout(() => { statusEl.style.opacity = '0'; }, 2500);
-                })
-                .catch(err => {
-                    console.error("Load error:", err);
-                    renderTables();
-                    statusEl.style.opacity = '0';
-                });
+                    
+                    // Restore Inputs
+                    if(data.inputs) {
+                        for(const [id, val] of Object.entries(data.inputs)) {
+                            const el = document.getElementById(id);
+                            if(el) el.value = val;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.log("No previous data found or sync error (First time load).", err);
+            }
+            
+            // Recalculate everything after loading
+            calcSetup();
+            calcOpex();
+            updateProgressUI();
         }
 
-        window.addEventListener('DOMContentLoaded', loadFromDatabase);
-    </script>
-
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+        });
     </script>
 </body>
 </html>
