@@ -306,7 +306,7 @@
         // GOOGLE SHEETS DATABASE CONFIGURATION
         const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyRmWIsxBGJQ-8lZWXi_HNyH04MQQjXG9lGYT9GrJSSNzgA2_XE6aHU5F4Nz4oU3IaX/exec";
 
-        const DATA_VERSION = 4;
+        const DATA_VERSION = 5;
 
         function buildSection(prefix, groups) {
             const out = [];
@@ -359,11 +359,11 @@
                 ["Validated Electronic Medical Records (EMR) system", "Annex A VI.B", 100000, "LGU General Fund"],
             ]],
             ["Phase 5 – General Personnel", [
-                ["Head of Facility (Physician) – full time", "Annex A I.A", 80000, "MOOE"],
-                ["IT Officer – may double as another admin role", "Annex B #22", 20000, "MOOE"],
-                ["Records Officer – with Medical Records Mgmt & ICD-10 training", "Annex B #23", 18000, "MOOE"],
-                ["Administrative Officer", "Annex B #24", 20000, "MOOE"],
-                ["Utility Worker", "Annex B #25", 13000, "MOOE"],
+                ["Head of Facility (Physician) - Minimum 1 Full Time", "Annex A I.A", 80000, "MOOE"],
+                ["IT/Information Management Officer - Minimum 1", "Annex B #22", 20000, "MOOE"],
+                ["Records Officer - Minimum 1", "Annex B #23", 18000, "MOOE"],
+                ["Administrative Officer - Minimum 1", "Annex B #24", 20000, "MOOE"],
+                ["Utility Worker - Minimum 1", "Annex B #25", 13000, "MOOE"],
                 ["Hiring & credentialing policy + orientation for new staff", "Annex B #15–16", 0],
             ]],
             ["Phase 6 – General Policies & Records", [
@@ -401,22 +401,22 @@
                 ["Sputum collection area – open air, partitions, lavatory/sink", "Annex C1 2.6.3", 15000, "LGU General Fund"],
             ]],
             ["PCF Medical Equipment", [
-                ["Autoclave, 20L", "Annex B Part II", 60000, "DOH HFEP"],
-                ["BP apparatus, adult & pediatric cuffs", "Annex B Part II", 5000, "DOH HFEP"],
-                ["Cervical inspection / vaginal speculum set (S, M, L)", "Annex B Part II", 6000, "DOH HFEP"],
-                ["Dressing / minor surgical set (forceps, scissors, etc.)", "Annex B Part II", 15000, "DOH HFEP"],
-                ["EENT diagnostic set (ophthalmoscope + otoscope)", "Annex B Part II", 25000, "DOH HFEP"],
-                ["Emergency light, examining light, examining table", "Annex B Part II", 25000, "DOH HFEP"],
-                ["Nebulizer, neurohammer, thermometer", "Annex B Part II", 5000, "DOH HFEP"],
-                ["Weighing scales (adult + infant)", "Annex B Part II", 12000, "DOH HFEP"],
-                ["Wheelchair & wheeled stretcher", "Annex B Part II", 33000, "DOH HFEP"],
-                ["Vaccine refrigerator & vaccine carrier with cold dog", "Annex B Part II", 60000, "DOH HFEP"],
+                ["Autoclave (at least 20L capacity) - Minimum 1", "Annex B Part II", 60000, "DOH HFEP"],
+                ["Sphygmomanometer (BP) with adult & pediatric cuffs - Min 1", "Annex B Part II", 5000, "DOH HFEP"],
+                ["Vaginal Speculum (different sizes S/M/L) - Min 1 set", "Annex B Part II", 6000, "DOH HFEP"],
+                ["Minor Surgical Set (forceps, scissors, needle holder) - Min 1 set", "Annex B Part II", 15000, "DOH HFEP"],
+                ["EENT diagnostic set (ophthalmoscope, otoscope) - Min 1 set", "Annex B Part II", 25000, "DOH HFEP"],
+                ["Examining table, examining light, & emergency light - 1 per room", "Annex B Part II", 25000, "DOH HFEP"],
+                ["Nebulizer, neurologic hammer, clinical thermometer - Min 1 each", "Annex B Part II", 5000, "DOH HFEP"],
+                ["Weighing scales (adult & infant/pediatric) - Min 1 each", "Annex B Part II", 12000, "DOH HFEP"],
+                ["Wheelchair & wheeled stretcher - Minimum 1 each", "Annex B Part II", 33000, "DOH HFEP"],
+                ["Vaccine ref (2-8°C) & vaccine carrier with cold dog - Min 1 each", "Annex B Part II", 60000, "DOH HFEP"],
                 ["Ambulance Type 1 (own) or MOA with licensed provider", "AO 2018-0001", 0],
             ]],
             ["PCF Personnel", [
-                ["Nurse – full time", "Annex B #18", 30000, "MOOE"],
-                ["Midwife – full time (for PCF/General)", "Annex B #19", 25000, "MOOE"],
-                ["Sanitation Inspector (for government PCF)", "Annex B #21", 20000, "MOOE"],
+                ["Nurse - Minimum 1 Full Time per shift", "Annex B #18", 30000, "MOOE"],
+                ["Midwife - Minimum 1 Full Time per shift", "Annex B #19", 25000, "MOOE"],
+                ["Sanitation Inspector - Minimum 1 (for LGU PCF)", "Annex B #21", 20000, "MOOE"],
                 ["DOH Primary Care Worker certification / trainings for staff", "Annex A I.D", 20000, "DOH HFEP"],
             ]],
             ["PCF Policies & Services", [
@@ -461,17 +461,17 @@
                 ["Lab counters, cabinets & stainless sink", "i-verify", 60000, "DOH HFEP"],
             ]],
             ["Phase 3 – Laboratory Equipment", [
-                ["Binocular microscope", "i-verify", 60000, "DOH HFEP"],
-                ["Clinical centrifuge + microhematocrit centrifuge", "i-verify", 55000, "DOH HFEP"],
-                ["Automated Hematology Analyzer (CBC)", "i-verify", 250000, "DOH HFEP"],
-                ["Automated / semi-auto Chemistry Analyzer (FBS, lipids, creatinine)", "i-verify", 350000, "DOH HFEP"],
+                ["Binocular microscope - Minimum 1 unit", "i-verify", 60000, "DOH HFEP"],
+                ["Clinical centrifuge & microhematocrit centrifuge - 1 each", "i-verify", 55000, "DOH HFEP"],
+                ["Automated Hematology Analyzer (for CBC) - Minimum 1 unit", "i-verify", 250000, "DOH HFEP"],
+                ["Chemistry Analyzer (Automated/Semi-auto) - Minimum 1 unit", "i-verify", 350000, "DOH HFEP"],
                 ["Laboratory refrigerator for reagents & kits (with temp log)", "i-verify", 30000, "DOH HFEP"],
                 ["Extraction chair, tourniquets, timers, pipettes & glassware", "i-verify", 25000, "DOH HFEP"],
                 ["Initial stock of reagents, RDT kits & consumables", "i-verify", 80000, "MOOE"],
             ]],
             ["Phase 4 – Laboratory Personnel", [
-                ["Head of Lab – Pathologist (retainer, monthly)", "i-verify", 15000, "MOOE"],
-                ["Registered Medical Technologists (salaries, monthly)", "i-verify", 100000, "MOOE"],
+                ["Head of Lab (Pathologist) - Minimum 1 Retainer/Part-time", "i-verify", 15000, "MOOE"],
+                ["Registered Medical Technologist - Min 1 Full Time per shift", "i-verify", 100000, "MOOE"],
             ]],
             ["Phase 5 – Quality, Safety & Records", [
                 ["Lab manual / SOPs for all tests offered", "Annex A IV.H–I", 5000, "MOOE"],
@@ -496,10 +496,10 @@
                 ["Full-height walls for privacy; windows with sill min 1.60m", "Annex C1 4.7–4.8", 0],
             ]],
             ["Phase 2 – Birthing & Newborn Equipment", [
-                ["Delivery table with stirrups", "i-verify", 45000, "DOH HFEP"],
-                ["Infant resuscitator (bag-valve-mask) & oxygen tanks with regulator", "i-verify", 30000, "DOH HFEP"],
-                ["Autoclave sterilizer (20L) for birthing", "i-verify", 25000, "DOH HFEP"],
-                ["Radiant warmer / newborn care area", "i-verify", 80000, "DOH HFEP"],
+                ["Delivery table with stirrups - Minimum 1 per delivery room", "i-verify", 45000, "DOH HFEP"],
+                ["Infant resuscitator (BVM) & oxygen tanks with regulator - Min 1 set", "i-verify", 30000, "DOH HFEP"],
+                ["Autoclave sterilizer (20L) for birthing - Minimum 1 unit", "i-verify", 25000, "DOH HFEP"],
+                ["Radiant warmer for newborn care - Minimum 1 unit", "i-verify", 80000, "DOH HFEP"],
                 ["Suction apparatus (adult & neonatal)", "i-verify", 15000, "DOH HFEP"],
                 ["Delivery sets (cord clamps, scissors) & episiotomy/repair sets", "i-verify", 18000, "DOH HFEP"],
                 ["Fetal doppler, BP apparatus, newborn weighing scale", "i-verify", 15000, "DOH HFEP"],
@@ -508,8 +508,8 @@
                 ["Emergency drugs: oxytocin, MgSO4, IV fluids", "i-verify", 10000, "MOOE"],
             ]],
             ["Phase 3 – Birthing Personnel", [
-                ["BEmONC-trained team (physician, nurse, midwife) – training", "i-verify", 45000, "DOH HFEP"],
-                ["Midwives for 24/7 coverage (salaries, monthly)", "Annex B #19", 60000, "MOOE"],
+                ["BEmONC-trained team (Physician, Nurse, Midwife) - At least 1 team", "i-verify", 45000, "DOH HFEP"],
+                ["Midwives - At least 3 (for 24/7 shifting schedule)", "Annex B #19", 60000, "MOOE"],
                 ["Essential Intrapartum & Newborn Care (EINC) training", "i-verify", 10000, "DOH HFEP"],
             ]],
             ["Phase 4 – Policies, Referral & Records", [
