@@ -155,7 +155,33 @@
                     <button onclick="addRow('pcf')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Requirement</button>
                 </div>
             </div>
-        </div>
+
+            <!-- Services Pricelist -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <h2 class="font-bold text-slate-800">Services Pricelist & Projected Revenue</h2>
+                        <p class="text-xs text-slate-500 mt-1">Estimate monthly earnings from these specific services.</p>
+                    </div>
+                    <span class="text-sm font-bold text-emerald-600" id="total-revenue-pcf">₱0 / month</span>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
+                            <tr>
+                                <th class="px-4 py-3">Service Offered</th>
+                                <th class="px-4 py-3 w-40">Price (₱)</th>
+                                <th class="px-4 py-3 w-32 text-center">Vol/Month</th>
+                                <th class="px-4 py-3 w-40 text-right">Subtotal</th>
+                                <th class="px-4 py-3 w-16"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-revenue-pcf" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                    <button onclick="addRevenueRow('pcf')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Service</button>
+                </div>
+            </div>
+        </div></div>
 
         <!-- TAB 3: LABORATORY -->
         <div id="tab-lab" class="tab-content">
@@ -183,7 +209,33 @@
                     <button onclick="addRow('lab')" class="mt-4 text-sm text-teal-600 font-semibold hover:underline">+ Add Requirement</button>
                 </div>
             </div>
-        </div>
+
+            <!-- Services Pricelist -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
+                    <div>
+                        <h2 class="font-bold text-slate-800">Services Pricelist & Projected Revenue</h2>
+                        <p class="text-xs text-slate-500 mt-1">Estimate monthly earnings from these specific services.</p>
+                    </div>
+                    <span class="text-sm font-bold text-emerald-600" id="total-revenue-lab">₱0 / month</span>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-slate-500 uppercase bg-slate-50">
+                            <tr>
+                                <th class="px-4 py-3">Service Offered</th>
+                                <th class="px-4 py-3 w-40">Price (₱)</th>
+                                <th class="px-4 py-3 w-32 text-center">Vol/Month</th>
+                                <th class="px-4 py-3 w-40 text-right">Subtotal</th>
+                                <th class="px-4 py-3 w-16"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-revenue-lab" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                    <button onclick="addRevenueRow('lab')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Service</button>
+                </div>
+            </div>
+        </div></div>
 
         <!-- TAB 4: BEMONC -->
         <div id="tab-bemonc" class="tab-content">
@@ -211,34 +263,35 @@
                     <button onclick="addRow('bemonc')" class="mt-4 text-sm text-pink-600 font-semibold hover:underline">+ Add Requirement</button>
                 </div>
             </div>
-        </div>
 
-        <!-- TAB 5: REVENUE PROJECTIONS -->
-        <div id="tab-revenue" class="tab-content">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="p-4 bg-blue-50 border-b border-blue-100 flex justify-between items-center">
+            <!-- Services Pricelist -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap justify-between items-center gap-2">
                     <div>
-                        <h2 class="font-bold text-blue-800">Service Pricelist & Revenue Projections</h2>
-                        <p class="text-xs text-blue-600 mt-1">Estimate your monthly income to ensure sustainability.</p>
+                        <h2 class="font-bold text-slate-800">Services Pricelist & Projected Revenue</h2>
+                        <p class="text-xs text-slate-500 mt-1">Estimate monthly earnings from these specific services.</p>
                     </div>
-                    <span class="text-sm font-bold text-blue-700" id="total-revenue-cost">₱0 / month</span>
+                    <span class="text-sm font-bold text-emerald-600" id="total-revenue-bemonc">₱0 / month</span>
                 </div>
-                <div class="p-6">
+                <div class="p-6 overflow-x-auto">
                     <table class="w-full text-sm text-left">
                         <thead class="text-xs text-slate-500 uppercase bg-slate-50">
                             <tr>
                                 <th class="px-4 py-3">Service Offered</th>
-                                <th class="px-4 py-3 w-32">Price (₱)</th>
-                                <th class="px-4 py-3 w-40">Est. Volume / Mo</th>
-                                <th class="px-4 py-3 w-48 text-right">Projected Revenue</th>
+                                <th class="px-4 py-3 w-40">Price (₱)</th>
+                                <th class="px-4 py-3 w-32 text-center">Vol/Month</th>
+                                <th class="px-4 py-3 w-40 text-right">Subtotal</th>
                                 <th class="px-4 py-3 w-16"></th>
                             </tr>
                         </thead>
-                        <tbody id="tbody-revenue" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="tbody-revenue-bemonc" class="divide-y divide-slate-100"></tbody>
                     </table>
-                    <button onclick="addRevenueRow()" class="mt-4 text-sm text-blue-600 font-semibold hover:underline">+ Add Service</button>
+                    <button onclick="addRevenueRow('bemonc')" class="mt-4 text-sm text-indigo-600 font-semibold hover:underline">+ Add Service</button>
                 </div>
             </div>
+        </div></div>
+
+        <!-- TAB 5: REVENUE PROJECTIONS -->
         </div>
 
     </div>
@@ -253,7 +306,7 @@
         // GOOGLE SHEETS DATABASE CONFIGURATION
         const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyRmWIsxBGJQ-8lZWXi_HNyH04MQQjXG9lGYT9GrJSSNzgA2_XE6aHU5F4Nz4oU3IaX/exec";
 
-        const DATA_VERSION = 3;
+        const DATA_VERSION = 4;
 
         function buildSection(prefix, groups) {
             const out = [];
@@ -474,11 +527,11 @@
         ]);
 
         const DEFAULT_REVENUE = [
-            { id: "rev_1", service: "Normal Delivery (PhilHealth MCP)", price: 8000, volume: 20 },
-            { id: "rev_2", service: "Primary Care Consultation", price: 300, volume: 500 },
-            { id: "rev_3", service: "CBC with Platelet Count", price: 250, volume: 300 },
-            { id: "rev_4", service: "Urinalysis", price: 100, volume: 300 },
-            { id: "rev_5", service: "Fasting Blood Sugar", price: 150, volume: 200 }
+            { id: "rev_1", section: "bemonc", service: "Normal Delivery (PhilHealth MCP)", price: 8000, volume: 20 },
+            { id: "rev_2", section: "pcf", service: "Primary Care Consultation", price: 300, volume: 500 },
+            { id: "rev_3", section: "lab", service: "CBC with Platelet Count", price: 250, volume: 300 },
+            { id: "rev_4", section: "lab", service: "Urinalysis", price: 100, volume: 300 },
+            { id: "rev_5", section: "lab", service: "Fasting Blood Sugar", price: 150, volume: 200 }
         ];
 
         const SECTIONS = ['general', 'pcf', 'lab', 'bemonc'];
@@ -587,24 +640,30 @@
                     ${progressBar(doneCount, total, SECTION_COLORS[section])}`;
             });
 
-            const tbodyRev = document.getElementById('tbody-revenue');
-            tbodyRev.innerHTML = '';
-            let totalRev = 0;
-            appData.revenue.forEach((item, idx) => {
-                const subTotal = (parseFloat(item.price)||0) * (parseInt(item.volume)||0);
-                totalRev += subTotal;
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50";
-                tr.innerHTML = `
-                    <td class="px-4 py-3"><input type="text" value="${esc(item.service)}" onchange="updateData('revenue', ${idx}, 'service', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none font-medium"></td>
-                    <td class="px-4 py-3"><div class="flex items-center">₱<input type="number" value="${esc(item.price)}" onchange="updateData('revenue', ${idx}, 'price', this.value)" class="w-full ml-1 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none text-right"></div></td>
-                    <td class="px-4 py-3"><input type="number" value="${esc(item.volume)}" onchange="updateData('revenue', ${idx}, 'volume', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none text-center"></td>
-                    <td class="px-4 py-3 text-right font-bold text-emerald-600">${fmt.format(subTotal)}</td>
-                    <td class="px-4 py-3 text-right"><button onclick="removeRow('revenue', ${idx})" class="text-red-400 hover:text-red-600 font-bold px-2">×</button></td>
-                `;
-                tbodyRev.appendChild(tr);
+            let totalRevAll = 0;
+            ['pcf', 'lab', 'bemonc'].forEach(sec => {
+                const tbodyRev = document.getElementById('tbody-revenue-' + sec);
+                if (!tbodyRev) return;
+                tbodyRev.innerHTML = '';
+                let totalRevSec = 0;
+                appData.revenue.forEach((item, idx) => {
+                    if(item.section !== sec) return;
+                    const subTotal = (parseFloat(item.price)||0) * (parseInt(item.volume)||0);
+                    totalRevSec += subTotal;
+                    totalRevAll += subTotal;
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-50";
+                    tr.innerHTML = `
+                        <td class="px-4 py-3"><input type="text" value="${esc(item.service)}" onchange="updateData('revenue', ${idx}, 'service', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none font-medium"></td>
+                        <td class="px-4 py-3"><div class="flex items-center">₱<input type="number" value="${esc(item.price)}" onchange="updateData('revenue', ${idx}, 'price', this.value)" class="w-full ml-1 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none text-right"></div></td>
+                        <td class="px-4 py-3"><input type="number" value="${esc(item.volume)}" onchange="updateData('revenue', ${idx}, 'volume', this.value)" class="w-full bg-transparent border-b border-transparent hover:border-slate-300 focus:border-indigo-500 outline-none text-center"></td>
+                        <td class="px-4 py-3 text-right font-bold text-emerald-600">${fmt.format(subTotal)}</td>
+                        <td class="px-4 py-3 text-right"><button onclick="removeRow('revenue', ${idx})" class="text-red-400 hover:text-red-600 font-bold px-2">×</button></td>
+                    `;
+                    tbodyRev.appendChild(tr);
+                });
+                document.getElementById('total-revenue-' + sec).textContent = fmt.format(totalRevSec) + ' / month';
             });
-            document.getElementById('total-revenue-cost').textContent = fmt.format(totalRev) + ' / month';
 
             updateDashboard();
         }
@@ -674,9 +733,9 @@
             triggerSave();
         }
 
-        function addRevenueRow() {
+        function addRevenueRow(section) {
             const id = Math.random().toString(36).substr(2, 9);
-            appData.revenue.push({ id: id, service: "New Service", price: 0, volume: 0 });
+            appData.revenue.push({ id: id, section: section, service: "New Service", price: 0, volume: 0 });
             renderTables();
             triggerSave();
         }
@@ -707,7 +766,7 @@
         }
 
         function hydrate(data) {
-            const result = { version: DATA_VERSION, revenue: data.revenue || clone(DEFAULT_REVENUE) };
+            const result = { version: DATA_VERSION, revenue: (data.revenue || clone(DEFAULT_REVENUE)).map(r => ({...r, section: r.section || "pcf"})) };
             SECTIONS.forEach(section => {
                 const defMap = {};
                 DEFAULTS[section].forEach(d => defMap[d.id] = d);
@@ -729,7 +788,7 @@
 
         function migrateFromV2(old) {
             // Version 2 didn't have 'general', so it was all in 'pcf'.
-            const result = { version: DATA_VERSION, general: clone(DEFAULT_GENERAL), pcf: clone(DEFAULT_PCF), lab: clone(DEFAULT_LAB), bemonc: clone(DEFAULT_BEMONC), revenue: old.revenue || clone(DEFAULT_REVENUE) };
+            const result = { version: DATA_VERSION, general: clone(DEFAULT_GENERAL), pcf: clone(DEFAULT_PCF), lab: clone(DEFAULT_LAB), bemonc: clone(DEFAULT_BEMONC), revenue: (old.revenue || clone(DEFAULT_REVENUE)).map(r => ({...r, section: r.section || "pcf"})) };
             
             if (old.pcf) {
                 // Map over old PCF items to preserve checked status or customizations
