@@ -306,7 +306,7 @@
         // GOOGLE SHEETS DATABASE CONFIGURATION
         const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbyRmWIsxBGJQ-8lZWXi_HNyH04MQQjXG9lGYT9GrJSSNzgA2_XE6aHU5F4Nz4oU3IaX/exec";
 
-        const DATA_VERSION = 5;
+        const DATA_VERSION = 6;
 
         function buildSection(prefix, groups) {
             const out = [];
@@ -411,6 +411,11 @@
                 ["Weighing scales (adult & infant/pediatric) - Min 1 each", "Annex B Part II", 12000, "DOH HFEP"],
                 ["Wheelchair & wheeled stretcher - Minimum 1 each", "Annex B Part II", 33000, "DOH HFEP"],
                 ["Vaccine ref (2-8°C) & vaccine carrier with cold dog - Min 1 each", "Annex B Part II", 60000, "DOH HFEP"],
+                ["Stethoscope - Min 1", "Annex B Part II", 3000, "DOH HFEP"],
+                ["Foot stool, IV stand, Instrument table - Min 1 each", "Annex B Part II", 10000, "DOH HFEP"],
+                ["Snellen's Chart / Visual Acuity Chart - Min 1", "Annex B Part II", 1000, "DOH HFEP"],
+                ["Salter scale & Vaccine carrier thermometer - Min 1 each", "Annex B Part II", 5000, "DOH HFEP"],
+                ["Safety/Sharps collector box - Min 1", "Annex B Part II", 1000, "MOOE"],
                 ["Ambulance Type 1 (own) or MOA with licensed provider", "AO 2018-0001", 0],
             ]],
             ["PCF Personnel", [
@@ -428,7 +433,12 @@
             ["Dental (If in-house)", [
                 ["Dental clinic space – 8.63 sqm per dental chair with sink", "Annex C1 2.5.5", 0],
                 ["Dental unit & chair with compressor", "Annex B Part II", 250000, "DOH HFEP"],
-                ["Dental instruments (prophylaxis set, extraction forceps, etc.)", "Annex B Part II", 50000, "DOH HFEP"],
+                ["Dental Unit & chair with compressor, high/low speed handpieces", "Annex B Part II", 250000, "DOH HFEP"],
+                ["Dental prophylaxis instrument set (scalers, curettes, probes)", "Annex B Part II", 20000, "DOH HFEP"],
+                ["Dental instruments (mouth mirror, cotton plier, explorer, spoon excavator) - 1 set", "Annex B Part II", 5000, "DOH HFEP"],
+                ["Basic Dental Surgery Set (Extraction forceps adult/pedo, aspirating syringe, bone file)", "Annex B Part II", 50000, "DOH HFEP"],
+                ["Dental instrument cabinet, table, sterilizer, sharps disposal", "Annex B Part II", 30000, "DOH HFEP"],
+
                 ["Dentist – employed or via MOA", "Annex B #20", 30000, "MOOE"],
             ]]
         ]);
