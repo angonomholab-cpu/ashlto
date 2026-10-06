@@ -23,7 +23,6 @@
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Loading Overlay */
         #sync-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.8); z-index: 100; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -98,47 +97,38 @@
                             <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="1. SHC Standard Plans & PTC Verification">1. SHC Blueprint & PTC Clear</div>
                             <div class="col-start-2 col-end-4 bg-blue-500 h-5 rounded shadow-sm cursor-pointer hover:bg-blue-600 relative" onclick="jumpTo('tab-general', 'card-pcf-ptc')"></div>
                         </div>
-
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
                             <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="2. Infrastructure Build (HFEP)">2. Infrastructure Build (HFEP)</div>
                             <div class="col-start-3 col-end-7 bg-slate-400 h-5 rounded shadow-sm relative"></div>
                         </div>
-
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
                             <div class="text-sm font-medium text-slate-700 pl-6 border-l-2 border-slate-200 truncate" title="Lab Physical Plant (AO 2021-0037)">Lab Plant (AO 2021-0037)</div>
                             <div class="col-start-4 col-end-7 bg-teal-500 h-3 mt-1 rounded shadow-sm cursor-pointer hover:bg-teal-600 relative" onclick="jumpTo('tab-lab', 'card-lab-plant')"></div>
                         </div>
-                        
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
                             <div class="text-sm font-medium text-slate-700 pl-6 border-l-2 border-slate-200 truncate" title="Birthing Plant (AO 2012-0012)">BEmONC Plant (AO 2012-0012)</div>
                             <div class="col-start-4 col-end-7 bg-pink-500 h-3 mt-1 rounded shadow-sm cursor-pointer hover:bg-pink-600 relative" onclick="jumpTo('tab-bemonc', 'card-bem-plant')"></div>
                         </div>
-
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
                             <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="3. LGU Procurement & Bidding (Analyzers/Beds)">3. Bidding & Procurement</div>
                             <div class="col-start-5 col-end-8 bg-purple-500 h-5 rounded shadow-sm relative"></div>
                         </div>
-
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
                             <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="4. HR Hiring & Training (Plantilla/JO)">4. HR Hiring & Training</div>
                             <div class="col-start-6 col-end-10 bg-amber-500 h-5 rounded shadow-sm relative"></div>
                         </div>
-                        
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
                             <div class="text-sm font-medium text-slate-700 pl-6 border-l-2 border-slate-200 truncate" title="Hire: 4 RMTs & Pathologist">Hire: 4 RMTs & Pathologist</div>
                             <div class="col-start-7 col-end-10 bg-teal-500 h-3 mt-1 rounded shadow-sm cursor-pointer hover:bg-teal-600 relative" onclick="jumpTo('tab-lab', 'card-lab-hr')"></div>
                         </div>
-
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
                             <div class="text-sm font-medium text-slate-700 pl-6 border-l-2 border-slate-200 truncate" title="Hire: Midwives & OB">Hire: Midwives & OB</div>
                             <div class="col-start-7 col-end-10 bg-pink-500 h-3 mt-1 rounded shadow-sm cursor-pointer hover:bg-pink-600 relative" onclick="jumpTo('tab-bemonc', 'card-bem-hr')"></div>
                         </div>
-
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors">
                             <div class="text-sm font-medium text-slate-700 pl-2 truncate" title="5. Draft SOPs & DOH Policies">5. Draft Policies & SOPs</div>
                             <div class="col-start-8 col-end-11 bg-indigo-500 h-5 rounded shadow-sm cursor-pointer hover:bg-indigo-600 relative" onclick="jumpTo('tab-general', 'card-pcf-policies')"></div>
                         </div>
-
                         <div class="gantt-grid items-center py-2 hover:bg-slate-50 transition-colors border-b border-slate-100">
                             <div class="text-sm font-bold text-slate-800 pl-2 truncate" title="6. OSS LTO Application & CHD Inspection">6. OSS LTO & CHD Inspection</div>
                             <div class="col-start-11 col-end-13 bg-rose-500 h-5 rounded shadow-sm cursor-pointer hover:bg-rose-600 relative" onclick="jumpTo('tab-general', 'card-pcf-lto')"></div>
@@ -147,88 +137,111 @@
                 </div>
             </main>
 
-            <!-- PCF Checklists -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- SHC PTC Verification -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-blue-500" id="card-pcf-ptc">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-slate-900 text-lg">SHC Infrastructure & PTC Verification</h3>
-                        <span class="text-sm font-bold text-blue-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-blue-500 flex flex-col" id="card-pcf-ptc">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-900 text-lg">SHC Infrastructure & PTC Verification</h3>
+                            <span class="text-sm font-bold text-blue-600 card-prog-text">0%</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4 pb-3 border-b border-slate-100">DOH HFEP Project Requirements</p>
+                        <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Verify PTC Status with DOH-HFEP Engineer.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Secure 3 sets of 20"x30" DOH Standard Blueprints.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Sangguniang Bayan (SB) Resolution establishing the PCF.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Certificate of Completion / Turnover documents signed by Mayor.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Health Facility Geographic Form (Location Coordinates).</span></label>
+                        </div>
                     </div>
-                    <p class="text-xs text-slate-500 mb-4 pb-3 border-b border-slate-100">DOH HFEP Project Requirements</p>
-                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Verify PTC Status with DOH-HFEP Engineer.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Secure 3 sets of 20"x30" DOH Standard Blueprints.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Sangguniang Bayan (SB) Resolution establishing the PCF.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Certificate of Completion / Turnover documents signed by Mayor.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-ptc-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Health Facility Geographic Form (Location Coordinates).</span></label>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-pcf-ptc" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" rows="2" placeholder="e.g. Waiting for Engr. Cruz for blueprint signing..."></textarea>
                     </div>
                 </div>
 
                 <!-- PCF Personnel -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-blue-500" id="card-pcf-hr">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-slate-900 text-lg">PCF Base Personnel</h3>
-                        <span class="text-sm font-bold text-blue-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-blue-500 flex flex-col" id="card-pcf-hr">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-900 text-lg">PCF Base Personnel</h3>
+                            <span class="text-sm font-bold text-blue-600 card-prog-text">0%</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4 pb-3 border-b border-slate-100">Excluding Lab and BEmONC staff.</p>
+                        <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Head Physician (Full-time, PRC ID, Primary Care Cert).</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Registered Nurse (Full-time, PRC ID).</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Dentist (PRC ID or valid MOA).</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Sanitation Inspector.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">IT Officer & Records Officer (ICD-10 Training).</span></label>
+                        </div>
                     </div>
-                    <p class="text-xs text-slate-500 mb-4 pb-3 border-b border-slate-100">Excluding Lab and BEmONC staff.</p>
-                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Head Physician (Full-time, PRC ID, Primary Care Cert).</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Registered Nurse (Full-time, PRC ID).</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Dentist (PRC ID or valid MOA).</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Sanitation Inspector.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="pcf-hr-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-blue-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">IT Officer & Records Officer (ICD-10 Training).</span></label>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-pcf-hr" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" rows="2" placeholder="e.g. IT Officer still lacks ICD-10 Training cert..."></textarea>
                     </div>
                 </div>
 
                 <!-- PCF Exhaustive Policies (AO 2020-0047) -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-indigo-600 lg:col-span-2" id="card-pcf-policies">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-indigo-900 text-lg">EXHAUSTIVE: Primary Care Facility Policies & Manuals (AO 2020-0047)</h3>
-                        <span class="text-sm font-bold text-indigo-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-indigo-600 lg:col-span-2 flex flex-col" id="card-pcf-policies">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-indigo-900 text-lg">EXHAUSTIVE: Primary Care Facility Policies & Manuals (AO 2020-0047)</h3>
+                            <span class="text-sm font-bold text-indigo-600 card-prog-text">0%</span>
+                        </div>
+                        <p class="text-xs text-indigo-700 bg-indigo-50 p-2 rounded mb-4">Required documented policies for the overarching Primary Care Facility. (Check during physical inspection).</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                            <div class="space-y-2">
+                                <p class="text-[11px] font-bold text-slate-500 uppercase">A. Patient Care & Services</p>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Informed Consent prior to procedures.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Patients' Rights and Responsibilities (Visible posting).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Written procedures for Minor Surgeries (Suturing, Circumcision, I&D).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policies for Population-based care (Epidemiologic, Vector Control).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policies for Individual-based care (Maternal, Nutrition, Family Planning).</span></label>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-[11px] font-bold text-slate-500 uppercase">B. Administrative & Network</p>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Written policy on issuance of medical/death certificates.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Patient Navigation & PCPN Referrals.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Supervision policy for Barangay Health Stations (BHS).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-9" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Hiring, Credentialing, and Orientation policies for staff.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-10" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Continuous Quality Improvement (CQI) Program / Customer Survey.</span></label>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-[11px] font-bold text-slate-500 uppercase">C. Information & Environment</p>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-11" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Records retention/disposal policy (per National Archives guidelines).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-12" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Data privacy policy protecting EMR/charts from unauthorized access.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-13" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Building Maintenance Program & Security Arrangements.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-14" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Waste Disposal Management Policies & DENR-hauler Contracts.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-15" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infection Prevention and Control (IPC) Manual (Outbreaks, Needlesticks).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-16" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Reporting of Notifiable Diseases policy (PIDSR).</span></label>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-xs text-indigo-700 bg-indigo-50 p-2 rounded mb-4">Required documented policies for the overarching Primary Care Facility. (Check during physical inspection).</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                        <div class="space-y-2">
-                            <p class="text-[11px] font-bold text-slate-500 uppercase">A. Patient Care & Services</p>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Informed Consent prior to procedures.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Patients' Rights and Responsibilities (Visible posting).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Written procedures for Minor Surgeries (Suturing, Circumcision, I&D).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policies for Population-based care (Epidemiologic, Vector Control).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policies for Individual-based care (Maternal, Nutrition, Family Planning).</span></label>
-                        </div>
-                        <div class="space-y-2">
-                            <p class="text-[11px] font-bold text-slate-500 uppercase">B. Administrative & Network</p>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Written policy on issuance of medical/death certificates.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Patient Navigation & PCPN Referrals.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Supervision policy for Barangay Health Stations (BHS).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-9" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Hiring, Credentialing, and Orientation policies for staff.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-10" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Continuous Quality Improvement (CQI) Program / Customer Survey.</span></label>
-                        </div>
-                        <div class="space-y-2">
-                            <p class="text-[11px] font-bold text-slate-500 uppercase">C. Information & Environment</p>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-11" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Records retention/disposal policy (per National Archives guidelines).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-12" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Data privacy policy protecting EMR/charts from unauthorized access.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-13" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Building Maintenance Program & Security Arrangements.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-14" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Waste Disposal Management Policies & DENR-hauler Contracts.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-15" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infection Prevention and Control (IPC) Manual (Outbreaks, Needlesticks).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="pcf-pol-16" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-indigo-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Reporting of Notifiable Diseases policy (PIDSR).</span></label>
-                        </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-pcf-policies" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" rows="2" placeholder="e.g. IPC Manual drafting in progress..."></textarea>
                     </div>
                 </div>
 
                 <!-- LTO OSS Application -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-rose-500 lg:col-span-2" id="card-pcf-lto">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-slate-900 text-lg">One-Stop Shop (OSS) LTO Filing</h3>
-                        <span class="text-sm font-bold text-rose-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-rose-500 lg:col-span-2 flex flex-col" id="card-pcf-lto">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-900 text-lg">One-Stop Shop (OSS) LTO Filing</h3>
+                            <span class="text-sm font-bold text-rose-600 card-prog-text">0%</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Accomplished Application Form & Notarized Acknowledgment.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Fully accomplished Self-Assessment Tools (SAT) for all 3 facilities.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Payment of Official LTO Fees to CHD Cashier.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300"><span class="text-sm font-bold text-emerald-700 peer-checked:line-through peer-checked:text-slate-400">Mandatory 30-Day Rectification of CHD Inspection findings.</span></label>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Accomplished Application Form & Notarized Acknowledgment.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Fully accomplished Self-Assessment Tools (SAT) for all 3 facilities.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-rose-600 rounded border-slate-300"><span class="text-sm text-slate-700 peer-checked:line-through peer-checked:text-slate-400">Payment of Official LTO Fees to CHD Cashier.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="oss-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-emerald-600 rounded border-slate-300"><span class="text-sm font-bold text-emerald-700 peer-checked:line-through peer-checked:text-slate-400">Mandatory 30-Day Rectification of CHD Inspection findings.</span></label>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-pcf-lto" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" rows="2" placeholder="e.g. Awaiting Mayor's signature for notarization..."></textarea>
                     </div>
                 </div>
             </div>
@@ -242,117 +255,113 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Lab Plant -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-500" id="card-lab-plant">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-slate-900 text-lg">Physical Plant (AO 2021-0037)</h3>
-                        <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-500 flex flex-col" id="card-lab-plant">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-900 text-lg">Physical Plant (AO 2021-0037)</h3>
+                            <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
+                        </div>
+                        <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Min 20 sq. meters for Clinical Work Area.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Dedicated extraction area separate from work area.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Flooring: Seamless and self-coving to 6 inches height.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Plumbing: Stainless steel sink (min 8" depth) & gooseneck faucet.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Proper ventilation/exhaust systems installed per section.</span></label>
+                        </div>
                     </div>
-                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Min 20 sq. meters for Clinical Work Area.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Dedicated extraction area separate from work area.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Flooring: Seamless and self-coving to 6 inches height.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Plumbing: Stainless steel sink (min 8" depth) & gooseneck faucet.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-plant-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Proper ventilation/exhaust systems installed per section.</span></label>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-lab-plant" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-teal-500 focus:outline-none" rows="2" placeholder="e.g. Waiting for plumber to install gooseneck faucet..."></textarea>
                     </div>
                 </div>
 
                 <!-- Lab HR -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-500" id="card-lab-hr">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-slate-900 text-lg">Lab Personnel (Min. 4 RMTs)</h3>
-                        <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-500 flex flex-col" id="card-lab-hr">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-900 text-lg">Lab Personnel (Min. 4 RMTs)</h3>
+                            <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
+                        </div>
+                        <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through"><strong>Head Pathologist:</strong> Clinical Pathologist (PSP Cert, PRC, Contract).</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 1 (Microscopy) - Valid PRC, 201 File.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 2 (Hematology) - Valid PRC, 201 File.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 3 (Clinical Chem) - Valid PRC, 201 File.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 4 (Sero/Immuno) - Valid PRC, 201 File.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-6" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Designated Biosafety & Biosecurity Officer.</span></label>
+                        </div>
                     </div>
-                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through"><strong>Head Pathologist:</strong> Clinical Pathologist (PSP Cert, PRC, Contract).</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 1 (Microscopy) - Valid PRC, 201 File.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 2 (Hematology) - Valid PRC, 201 File.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 3 (Clinical Chem) - Valid PRC, 201 File.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">RMT 4 (Sero/Immuno) - Valid PRC, 201 File.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="lab-hr-6" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-teal-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Designated Biosafety & Biosecurity Officer.</span></label>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-lab-hr" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-teal-500 focus:outline-none" rows="2" placeholder="e.g. Budget request for additional 2 RMTs pending with HRMO..."></textarea>
                     </div>
                 </div>
                 
-                <!-- Lab Exhaustive Policies (AO 2021-0037) -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-700 lg:col-span-2" id="card-lab-policies">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-teal-900 text-lg">EXHAUSTIVE: Clinical Laboratory Policies & Logs (AO 2021-0037)</h3>
-                        <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
+                <!-- Lab Exhaustive Policies -->
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-teal-700 lg:col-span-2 flex flex-col" id="card-lab-policies">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-teal-900 text-lg">EXHAUSTIVE: Clinical Laboratory Policies & Logs (AO 2021-0037)</h3>
+                            <span class="text-sm font-bold text-teal-600 card-prog-text">0%</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                            <div class="space-y-2">
+                                <p class="text-[11px] font-bold text-slate-500 uppercase">A. Technical & QA Policies</p>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">SOPs for technical procedures in ALL sections (signed by Pathologist).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Internal Quality Assurance Program (IQAP) and IQC.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Proof of registration/participation in NEQAS (NRLs).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Procedures for receipt and performance of routine/STAT requests.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Procedures for validation and reporting of critical results.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Referral and Outsourcing of Exams (with valid MOA).</span></label>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-[11px] font-bold text-slate-500 uppercase">B. Administrative & Safety</p>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Local Risk Assessment & Biosafety/Biosecurity Protocols.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Contingency plan for equipment breakdown (max 3 months outsourcing).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-9" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Material Safety Data Sheet (MSDS) accessible to all personnel.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-10" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Daily Temperature Logs (Room Temp and Refrigerator Temp).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-11" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Complete Logbooks: Entry, Releasing, Endorsement, Adverse Events.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-12" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on use of digital signatures (E-Commerce Law compliant).</span></label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                        <div class="space-y-2">
-                            <p class="text-[11px] font-bold text-slate-500 uppercase">A. Technical & QA Policies</p>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">SOPs for technical procedures in ALL sections (signed by Pathologist).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Internal Quality Assurance Program (IQAP) and IQC.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Proof of registration/participation in NEQAS (NRLs).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Procedures for receipt and performance of routine/STAT requests.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Procedures for validation and reporting of critical results.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on Referral and Outsourcing of Exams (with valid MOA).</span></label>
-                        </div>
-                        <div class="space-y-2">
-                            <p class="text-[11px] font-bold text-slate-500 uppercase">B. Administrative & Safety</p>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Local Risk Assessment & Biosafety/Biosecurity Protocols.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Contingency plan for equipment breakdown (max 3 months outsourcing).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-9" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Material Safety Data Sheet (MSDS) accessible to all personnel.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-10" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Daily Temperature Logs (Room Temp and Refrigerator Temp).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-11" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Complete Logbooks: Entry, Releasing, Endorsement, Adverse Events.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="lab-pol-12" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-teal-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Policy on use of digital signatures (E-Commerce Law compliant).</span></label>
-                        </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-lab-policies" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-teal-500 focus:outline-none" rows="2" placeholder="e.g. MSDS binder placed near the sink area..."></textarea>
                     </div>
                 </div>
 
-                <!-- Lab Costing Table -->
                 <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
-                    <h3 class="font-bold text-slate-900 text-xl mb-4">Laboratory Setup Costing (Capital Outlay)</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-900 text-xl">1. Lab Setup Costing (Capital Outlay)</h3>
+                        <button onclick="addRow('lab-costing-tbody', 'cost')" class="px-3 py-1 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 rounded text-sm font-semibold transition">+ Add Item</button>
+                    </div>
                     <div class="overflow-x-auto rounded-lg border border-slate-200">
-                        <table class="w-full text-left text-sm text-slate-600" id="costing-table">
+                        <table class="w-full text-left text-sm text-slate-600">
                             <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
                                 <tr>
                                     <th class="px-4 py-3">Equipment / Requirement</th>
                                     <th class="px-4 py-3 text-center w-20">Qty</th>
                                     <th class="px-4 py-3 text-right w-32">Unit Price</th>
                                     <th class="px-4 py-3 text-right bg-slate-100 w-36">Total Cost</th>
+                                    <th class="px-4 py-3 text-center w-12">Act</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100" id="costing-tbody">
-                                <tr class="cost-row">
-                                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none focus:border-teal-500 bg-transparent" value="Automated Chemistry Analyzer"></td>
-                                    <td class="px-4 py-2"><input type="number" id="lab-qty-1" class="w-full text-center border rounded p-1 focus:ring-1 cost-qty" value="1" onchange="calcSetup(); autoSave()"></td>
-                                    <td class="px-4 py-2"><input type="number" id="lab-prc-1" class="w-full text-right border rounded p-1 focus:ring-1 cost-price" value="250000" onchange="calcSetup(); autoSave()"></td>
-                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold item-total">₱0</td>
-                                </tr>
-                                <tr class="cost-row">
-                                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent" value="Automated Hematology Analyzer (CBC)"></td>
-                                    <td class="px-4 py-2"><input type="number" id="lab-qty-2" class="w-full text-center border rounded p-1 cost-qty" value="1" onchange="calcSetup(); autoSave()"></td>
-                                    <td class="px-4 py-2"><input type="number" id="lab-prc-2" class="w-full text-right border rounded p-1 cost-price" value="280000" onchange="calcSetup(); autoSave()"></td>
-                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold item-total">₱0</td>
-                                </tr>
-                                <tr class="cost-row">
-                                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent" value="ISE Electrolyte Analyzer"></td>
-                                    <td class="px-4 py-2"><input type="number" id="lab-qty-3" class="w-full text-center border rounded p-1 cost-qty" value="1" onchange="calcSetup(); autoSave()"></td>
-                                    <td class="px-4 py-2"><input type="number" id="lab-prc-3" class="w-full text-right border rounded p-1 cost-price" value="150000" onchange="calcSetup(); autoSave()"></td>
-                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold item-total">₱0</td>
-                                </tr>
-                                <tr class="cost-row">
-                                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent" value="Binocular Compound Microscope"></td>
-                                    <td class="px-4 py-2"><input type="number" id="lab-qty-4" class="w-full text-center border rounded p-1 cost-qty" value="1" onchange="calcSetup(); autoSave()"></td>
-                                    <td class="px-4 py-2"><input type="number" id="lab-prc-4" class="w-full text-right border rounded p-1 cost-price" value="40000" onchange="calcSetup(); autoSave()"></td>
-                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold item-total">₱0</td>
-                                </tr>
+                            <tbody class="divide-y divide-slate-100" id="lab-costing-tbody">
+                                <!-- Default Rows rendered by JS if empty -->
                             </tbody>
                             <tfoot class="bg-teal-50 font-bold text-teal-900">
-                                <tr>
-                                    <td colspan="3" class="px-4 py-3 text-right">Total Setup Cost:</td>
-                                    <td class="px-4 py-3 text-right text-lg" id="total-setup-cost">₱0</td>
-                                </tr>
+                                <tr><td colspan="3" class="px-4 py-3 text-right">Total Setup Cost:</td><td class="px-4 py-3 text-right text-lg" id="lab-setup-total">₱0</td><td></td></tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
 
-                <!-- Lab OPEX -->
                 <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
-                    <h3 class="font-bold text-slate-900 text-xl mb-4">Laboratory Annual OPEX (Personnel & NEQAS)</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-900 text-xl">2. Lab Annual OPEX</h3>
+                        <button onclick="addRow('lab-opex-tbody', 'cost')" class="px-3 py-1 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded text-sm font-semibold transition">+ Add Expense</button>
+                    </div>
                     <div class="overflow-x-auto rounded-lg border border-slate-200">
                         <table class="w-full text-left text-sm text-slate-600">
                             <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
@@ -361,41 +370,24 @@
                                     <th class="px-4 py-3 text-center w-20">Qty/Staff</th>
                                     <th class="px-4 py-3 text-right w-32">Annual Cost</th>
                                     <th class="px-4 py-3 text-right bg-slate-100 w-36">Total Annual</th>
+                                    <th class="px-4 py-3 text-center w-12">Act</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100" id="opex-tbody">
-                                <tr class="opex-row">
-                                    <td class="px-4 py-2">Salaries (4 RMTs @ 30k/mo)</td>
-                                    <td class="px-4 py-2"><input type="number" id="opx-qty-1" class="w-full text-center border rounded p-1 opex-qty" value="4" onchange="calcOpex(); autoSave()"></td>
-                                    <td class="px-4 py-2"><input type="number" id="opx-prc-1" class="w-full text-right border rounded p-1 opex-price" value="360000" onchange="calcOpex(); autoSave()"></td>
-                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold opex-total">₱0</td>
-                                </tr>
-                                <tr class="opex-row">
-                                    <td class="px-4 py-2">Pathologist Retainer</td>
-                                    <td class="px-4 py-2"><input type="number" id="opx-qty-2" class="w-full text-center border rounded p-1 opex-qty" value="1" onchange="calcOpex(); autoSave()"></td>
-                                    <td class="px-4 py-2"><input type="number" id="opx-prc-2" class="w-full text-right border rounded p-1 opex-price" value="180000" onchange="calcOpex(); autoSave()"></td>
-                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold opex-total">₱0</td>
-                                </tr>
-                                <tr class="opex-row">
-                                    <td class="px-4 py-2">NEQAS Registration Fees</td>
-                                    <td class="px-4 py-2"><input type="number" id="opx-qty-3" class="w-full text-center border rounded p-1 opex-qty" value="1" onchange="calcOpex(); autoSave()"></td>
-                                    <td class="px-4 py-2"><input type="number" id="opx-prc-3" class="w-full text-right border rounded p-1 opex-price" value="25000" onchange="calcOpex(); autoSave()"></td>
-                                    <td class="px-4 py-2 text-right bg-slate-50 font-bold opex-total">₱0</td>
-                                </tr>
+                            <tbody class="divide-y divide-slate-100" id="lab-opex-tbody">
+                                <!-- Default Rows rendered by JS if empty -->
                             </tbody>
                             <tfoot class="bg-purple-50 font-bold text-purple-900">
-                                <tr>
-                                    <td colspan="3" class="px-4 py-3 text-right">Total Annual OPEX:</td>
-                                    <td class="px-4 py-3 text-right text-lg" id="total-opex-cost">₱0</td>
-                                </tr>
+                                <tr><td colspan="3" class="px-4 py-3 text-right">Total Annual OPEX:</td><td class="px-4 py-3 text-right text-lg" id="lab-opex-total">₱0</td><td></td></tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
 
-                <!-- Lab ROI -->
                 <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
-                    <h3 class="font-bold text-slate-900 text-xl mb-4">Projected Earnings & ROI (Editable)</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-900 text-xl">3. Lab Projected Earnings & ROI</h3>
+                        <button onclick="addRow('lab-roi-tbody', 'roi')" class="px-3 py-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded text-sm font-semibold transition">+ Add Test</button>
+                    </div>
                     <div class="overflow-x-auto rounded-lg border border-slate-200">
                         <table class="w-full text-left text-sm text-slate-600">
                             <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
@@ -405,16 +397,15 @@
                                     <th class="px-4 py-3 text-right w-24">Cost</th>
                                     <th class="px-4 py-3 text-right w-24">Tests/Day</th>
                                     <th class="px-4 py-3 text-right bg-emerald-50 text-emerald-800">Daily Margin</th>
+                                    <th class="px-4 py-3 text-center w-12">Act</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100" id="roi-tbody">
-                                <tr class="calc-row"><td class="px-4 py-2">CBC w/ Platelet</td><td class="px-4 py-2"><input type="number" id="roi-p-1" class="price-input w-full text-right border rounded p-1" value="250" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-c-1" class="cost-input w-full text-right border rounded p-1" value="45" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-v-1" class="volume-input w-full text-right border rounded p-1" value="30" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2 text-right font-bold text-emerald-600 bg-emerald-50 daily-margin">₱0</td></tr>
-                                <tr class="calc-row"><td class="px-4 py-2">Routine Urinalysis</td><td class="px-4 py-2"><input type="number" id="roi-p-2" class="price-input w-full text-right border rounded p-1" value="120" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-c-2" class="cost-input w-full text-right border rounded p-1" value="20" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-v-2" class="volume-input w-full text-right border rounded p-1" value="35" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2 text-right font-bold text-emerald-600 bg-emerald-50 daily-margin">₱0</td></tr>
-                                <tr class="calc-row"><td class="px-4 py-2">Fasting Blood Sugar</td><td class="px-4 py-2"><input type="number" id="roi-p-3" class="price-input w-full text-right border rounded p-1" value="180" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-c-3" class="cost-input w-full text-right border rounded p-1" value="25" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2"><input type="number" id="roi-v-3" class="volume-input w-full text-right border rounded p-1" value="20" onchange="calcROI(); autoSave()"></td><td class="px-4 py-2 text-right font-bold text-emerald-600 bg-emerald-50 daily-margin">₱0</td></tr>
+                            <tbody class="divide-y divide-slate-100" id="lab-roi-tbody">
+                                <!-- Default Rows rendered by JS if empty -->
                             </tbody>
                             <tfoot class="bg-slate-100 font-bold text-slate-800">
-                                <tr><td colspan="4" class="px-4 py-3 text-right">Est. Annual Gross Margin:</td><td class="px-4 py-3 text-right text-emerald-700 text-lg bg-emerald-100" id="total-annual">₱0</td></tr>
-                                <tr><td colspan="4" class="px-4 py-3 text-right">Est. NET Annual (Gross - OPEX):</td><td class="px-4 py-3 text-right text-indigo-900 text-xl bg-indigo-100 border-t-4 border-indigo-200" id="total-net-annual">₱0</td></tr>
+                                <tr><td colspan="4" class="px-4 py-3 text-right">Est. Annual Gross Margin:</td><td class="px-4 py-3 text-right text-emerald-700 text-lg bg-emerald-100" id="lab-annual-total">₱0</td><td></td></tr>
+                                <tr><td colspan="4" class="px-4 py-3 text-right">Est. NET Annual (Gross - OPEX):</td><td class="px-4 py-3 text-right text-indigo-900 text-xl bg-indigo-100 border-t-4 border-indigo-200" id="lab-net-total">₱0</td><td></td></tr>
                             </tfoot>
                         </table>
                     </div>
@@ -429,61 +420,154 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                
                 <!-- BEmONC Plant -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-500" id="card-bem-plant">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-slate-900 text-lg">Physical Plant & Equipment</h3>
-                        <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-500 flex flex-col" id="card-bem-plant">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-900 text-lg">Physical Plant & Equipment</h3>
+                            <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                        </div>
+                        <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Birthing Room: Min 10.5 sqm per delivery table.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Ward Layout: Min 7.43 sqm per bed.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Dedicated Clean-up, Sterilization, and Scrub-up areas.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Delivery Table with Stirrups & Kelly Pad.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Infant Resuscitator (Ambu bag) & Fetal Doppler/Fetoscope.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-6" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Autoclave (Min 20L) & Emergency Drugs Kit (Oxytocin, MgSO4).</span></label>
+                        </div>
                     </div>
-                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Birthing Room: Min 10.5 sqm per delivery table.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Ward Layout: Min 7.43 sqm per bed.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Dedicated Clean-up, Sterilization, and Scrub-up areas.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-4" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Delivery Table with Stirrups & Kelly Pad.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-5" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Infant Resuscitator (Ambu bag) & Fetal Doppler/Fetoscope.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-plant-6" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Autoclave (Min 20L) & Emergency Drugs Kit (Oxytocin, MgSO4).</span></label>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-bem-plant" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 focus:outline-none" rows="2" placeholder="e.g. Delivery table delivered but missing stirrups..."></textarea>
                     </div>
                 </div>
 
                 <!-- BEmONC HR -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-500" id="card-bem-hr">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-slate-900 text-lg">BEmONC Personnel & Linkages</h3>
-                        <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-500 flex flex-col" id="card-bem-hr">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-slate-900 text-lg">BEmONC Personnel & Linkages</h3>
+                            <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                        </div>
+                        <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Consulting OB-GYN / Physician (On-call or retainer).</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Midwife 1: BEmONC & EINC Certified, Valid PRC ID.</span></label>
+                            <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Midwife 2: BEmONC & EINC Certified (for 24/7 rotation).</span></label>
+                        </div>
                     </div>
-                    <div class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-1" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Consulting OB-GYN / Physician (On-call or retainer).</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-2" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Midwife 1: BEmONC & EINC Certified, Valid PRC ID.</span></label>
-                        <label class="flex items-start gap-3 cursor-pointer group"><input type="checkbox" id="bem-hr-3" onchange="autoSave()" class="sub-check peer mt-1 w-4 h-4 text-pink-600 rounded"><span class="text-sm text-slate-700 peer-checked:line-through">Midwife 2: BEmONC & EINC Certified (for 24/7 rotation).</span></label>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-bem-hr" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 focus:outline-none" rows="2" placeholder="e.g. Midwife 2 scheduled for EINC training next week..."></textarea>
                     </div>
                 </div>
 
                 <!-- BEmONC Exhaustive Policies -->
-                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-700 lg:col-span-2" id="card-bem-policies">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-pink-900 text-lg">EXHAUSTIVE: Birthing Facility Policies & Manuals</h3>
-                        <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-l-4 border-slate-200 border-l-pink-700 lg:col-span-2 flex flex-col" id="card-bem-policies">
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-bold text-pink-900 text-lg">EXHAUSTIVE: Birthing Facility Policies & Manuals</h3>
+                            <span class="text-sm font-bold text-pink-600 card-prog-text">0%</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                            <div class="space-y-2">
+                                <p class="text-[11px] font-bold text-slate-500 uppercase">A. MOAs & Linkages</p>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Referral Hospital MOA (For C-Section & Complications).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Blood Bank MOA (For emergency blood transfusions).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Transport System MOA / DOH Registered Ambulance.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infectious Waste Hauler MOA (Placenta & Sharps disposal).</span></label>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-[11px] font-bold text-slate-500 uppercase">B. Clinical Protocols</p>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">EINC (Essential Intrapartum and Newborn Care) Protocol Manual.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">BEmONC Emergency Response Protocols.</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Sterilization & Decontamination Logs (Autoclave monitoring).</span></label>
+                                <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infection Control specific to Delivery and Newborn Ward.</span></label>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                        <div class="space-y-2">
-                            <p class="text-[11px] font-bold text-slate-500 uppercase">A. MOAs & Linkages</p>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-1" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Referral Hospital MOA (For C-Section & Complications).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-2" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Blood Bank MOA (For emergency blood transfusions).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-3" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Transport System MOA / DOH Registered Ambulance.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-4" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infectious Waste Hauler MOA (Placenta & Sharps disposal).</span></label>
-                        </div>
-                        <div class="space-y-2">
-                            <p class="text-[11px] font-bold text-slate-500 uppercase">B. Clinical Protocols</p>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-5" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">EINC (Essential Intrapartum and Newborn Care) Protocol Manual.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-6" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">BEmONC Emergency Response Protocols.</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-7" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Sterilization & Decontamination Logs (Autoclave monitoring).</span></label>
-                            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" id="bem-pol-8" onchange="autoSave()" class="sub-check peer mt-0.5 w-3.5 h-3.5 text-pink-600 rounded"><span class="text-xs text-slate-700 peer-checked:line-through">Infection Control specific to Delivery and Newborn Ward.</span></label>
-                        </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100">
+                        <label class="text-xs font-semibold text-slate-500 uppercase">Notes / Remarks:</label>
+                        <textarea id="note-bem-policies" oninput="autoSave()" class="w-full mt-1 text-sm border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-pink-500 focus:outline-none" rows="2" placeholder="e.g. MOA with Provincial Hospital for signing..."></textarea>
                     </div>
                 </div>
 
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-900 text-xl">1. Birthing Setup Costing (Capital Outlay)</h3>
+                        <button onclick="addRow('bem-costing-tbody', 'cost')" class="px-3 py-1 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 rounded text-sm font-semibold transition">+ Add Item</button>
+                    </div>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Equipment / Requirement</th>
+                                    <th class="px-4 py-3 text-center w-20">Qty</th>
+                                    <th class="px-4 py-3 text-right w-32">Unit Price</th>
+                                    <th class="px-4 py-3 text-right bg-slate-100 w-36">Total Cost</th>
+                                    <th class="px-4 py-3 text-center w-12">Act</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100" id="bem-costing-tbody">
+                            </tbody>
+                            <tfoot class="bg-pink-50 font-bold text-pink-900">
+                                <tr><td colspan="3" class="px-4 py-3 text-right">Total Setup Cost:</td><td class="px-4 py-3 text-right text-lg" id="bem-setup-total">₱0</td><td></td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-900 text-xl">2. Birthing Annual OPEX</h3>
+                        <button onclick="addRow('bem-opex-tbody', 'cost')" class="px-3 py-1 bg-purple-100 text-purple-700 hover:bg-purple-200 rounded text-sm font-semibold transition">+ Add Expense</button>
+                    </div>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Expense Item</th>
+                                    <th class="px-4 py-3 text-center w-20">Qty/Staff</th>
+                                    <th class="px-4 py-3 text-right w-32">Annual Cost</th>
+                                    <th class="px-4 py-3 text-right bg-slate-100 w-36">Total Annual</th>
+                                    <th class="px-4 py-3 text-center w-12">Act</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100" id="bem-opex-tbody">
+                            </tbody>
+                            <tfoot class="bg-purple-50 font-bold text-purple-900">
+                                <tr><td colspan="3" class="px-4 py-3 text-right">Total Annual OPEX:</td><td class="px-4 py-3 text-right text-lg" id="bem-opex-total">₱0</td><td></td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="task-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 lg:col-span-2">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-900 text-xl">3. Birthing Projected Earnings & ROI</h3>
+                        <button onclick="addRow('bem-roi-tbody', 'roi')" class="px-3 py-1 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 rounded text-sm font-semibold transition">+ Add Service</button>
+                    </div>
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-sm text-slate-600">
+                            <thead class="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th class="px-4 py-3">Service / Care Package</th>
+                                    <th class="px-4 py-3 text-right w-24">Price</th>
+                                    <th class="px-4 py-3 text-right w-24">Cost</th>
+                                    <th class="px-4 py-3 text-right w-24">Vol/Day</th>
+                                    <th class="px-4 py-3 text-right bg-emerald-50 text-emerald-800">Daily Margin</th>
+                                    <th class="px-4 py-3 text-center w-12">Act</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100" id="bem-roi-tbody">
+                            </tbody>
+                            <tfoot class="bg-slate-100 font-bold text-slate-800">
+                                <tr><td colspan="4" class="px-4 py-3 text-right">Est. Annual Gross Margin (365 days):</td><td class="px-4 py-3 text-right text-emerald-700 text-lg bg-emerald-100" id="bem-annual-total">₱0</td><td></td></tr>
+                                <tr><td colspan="4" class="px-4 py-3 text-right">Est. NET Annual (Gross - OPEX):</td><td class="px-4 py-3 text-right text-indigo-900 text-xl bg-indigo-100 border-t-4 border-indigo-200" id="bem-net-total">₱0</td><td></td></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -491,10 +575,9 @@
 
     <script>
         const formatter = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' });
-        
-        // Google Apps Script Web App URL
         const GAS_URL = "https://script.google.com/macros/s/AKfycbyRmWIsxBGJQ-8lZWXi_HNyH04MQQjXG9lGYT9GrJSSNzgA2_XE6aHU5F4Nz4oU3IaX/exec";
 
+        // Tab and Navigation Logic
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => {
@@ -502,7 +585,6 @@
                 el.classList.add('bg-slate-100', 'text-slate-600');
             });
             document.getElementById(tabId).classList.add('active');
-            
             let btnId = 'btn-' + tabId;
             document.getElementById(btnId).classList.remove('bg-slate-100', 'text-slate-600');
             document.getElementById(btnId).classList.add('bg-blue-600', 'text-white');
@@ -527,7 +609,6 @@
             document.querySelectorAll('.task-card').forEach((card) => {
                 const subChecks = card.querySelectorAll('.sub-check');
                 const cardProgText = card.querySelector('.card-prog-text');
-                
                 let cardTotal = subChecks.length;
                 let cardChecked = 0;
                 
@@ -546,58 +627,185 @@
             document.getElementById('overall-progress-text').textContent = overallPct + '% Completed';
         }
 
-        // --- Calculation Functions ---
-        function calcSetup() {
-            let total = 0;
-            document.querySelectorAll('.cost-row').forEach(row => {
-                const q = parseFloat(row.querySelector('.cost-qty').value) || 0;
-                const p = parseFloat(row.querySelector('.cost-price').value) || 0;
-                row.querySelector('.item-total').textContent = formatter.format(q * p);
-                total += (q * p);
+        // Table Data Management
+        const defaultLabTables = {
+            'lab-costing-tbody': [
+                {name: "Automated Chemistry Analyzer", qty: 1, price: 250000},
+                {name: "Automated Hematology Analyzer (CBC)", qty: 1, price: 280000},
+                {name: "ISE Electrolyte Analyzer", qty: 1, price: 150000},
+                {name: "Binocular Compound Microscope", qty: 1, price: 40000}
+            ],
+            'lab-opex-tbody': [
+                {name: "Salaries (4 RMTs @ 30k/mo)", qty: 4, price: 360000},
+                {name: "Pathologist Retainer", qty: 1, price: 180000},
+                {name: "NEQAS Registration Fees", qty: 1, price: 25000}
+            ],
+            'lab-roi-tbody': [
+                {name: "CBC w/ Platelet", price: 250, cost: 45, vol: 30},
+                {name: "Routine Urinalysis", price: 120, cost: 20, vol: 35},
+                {name: "Fasting Blood Sugar", price: 180, cost: 25, vol: 20}
+            ],
+            'bem-costing-tbody': [
+                {name: "Delivery Table w/ Stirrups", qty: 1, price: 35000},
+                {name: "Autoclave (Min 20L)", qty: 1, price: 25000},
+                {name: "Infant Resuscitator & Doppler", qty: 1, price: 8500},
+                {name: "Ward Beds", qty: 3, price: 15000}
+            ],
+            'bem-opex-tbody': [
+                {name: "Midwife Salaries (3x)", qty: 3, price: 240000},
+                {name: "Retained OB-GYN", qty: 1, price: 150000},
+                {name: "Facility Utilities", qty: 1, price: 100000}
+            ],
+            'bem-roi-tbody': [
+                {name: "Normal Delivery (PhilHealth MCP)", price: 8000, cost: 2000, vol: 2},
+                {name: "Newborn Screening (NBS)", price: 1750, cost: 1500, vol: 2},
+                {name: "Prenatal Checkups", price: 500, cost: 100, vol: 5}
+            ]
+        };
+
+        function renderTable(tbodyId, type, dataArray) {
+            const tbody = document.getElementById(tbodyId);
+            tbody.innerHTML = '';
+            const isLab = tbodyId.includes('lab');
+            const calcFunc = isLab ? 'calcLabFinancials' : 'calcBemFinancials';
+
+            dataArray.forEach(item => {
+                const tr = document.createElement('tr');
+                if (type === 'cost') {
+                    tr.innerHTML = `
+                        <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent t-name" value="${item.name}" oninput="autoSave()"></td>
+                        <td class="px-4 py-2"><input type="number" class="w-full text-center border rounded p-1 t-qty" value="${item.qty}" onchange="${calcFunc}(); autoSave()"></td>
+                        <td class="px-4 py-2"><input type="number" class="w-full text-right border rounded p-1 t-price" value="${item.price}" onchange="${calcFunc}(); autoSave()"></td>
+                        <td class="px-4 py-2 text-right bg-slate-50 font-bold t-total">₱0</td>
+                        <td class="px-4 py-2 text-center"><button onclick="removeRow(this, '${calcFunc}')" class="text-rose-500 font-bold hover:text-rose-700">&times;</button></td>
+                    `;
+                } else if (type === 'roi') {
+                    tr.innerHTML = `
+                        <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent t-name" value="${item.name}" oninput="autoSave()"></td>
+                        <td class="px-4 py-2"><input type="number" class="w-full text-right border rounded p-1 t-price" value="${item.price}" onchange="${calcFunc}(); autoSave()"></td>
+                        <td class="px-4 py-2"><input type="number" class="w-full text-right border rounded p-1 t-cost" value="${item.cost}" onchange="${calcFunc}(); autoSave()"></td>
+                        <td class="px-4 py-2"><input type="number" class="w-full text-right border rounded p-1 t-vol" value="${item.vol}" onchange="${calcFunc}(); autoSave()"></td>
+                        <td class="px-4 py-2 text-right font-bold text-emerald-600 bg-emerald-50 t-margin">₱0</td>
+                        <td class="px-4 py-2 text-center"><button onclick="removeRow(this, '${calcFunc}')" class="text-rose-500 font-bold hover:text-rose-700">&times;</button></td>
+                    `;
+                }
+                tbody.appendChild(tr);
             });
-            document.getElementById('total-setup-cost').textContent = formatter.format(total);
         }
 
-        function calcOpex() {
-            let total = 0;
-            document.querySelectorAll('.opex-row').forEach(row => {
-                const q = parseFloat(row.querySelector('.opex-qty').value) || 0;
-                const p = parseFloat(row.querySelector('.opex-price').value) || 0;
-                row.querySelector('.opex-total').textContent = formatter.format(q * p);
-                total += (q * p);
-            });
-            document.getElementById('total-opex-cost').textContent = formatter.format(total);
-            calcROI(); 
+        function addRow(tbodyId, type) {
+            const tbody = document.getElementById(tbodyId);
+            const isLab = tbodyId.includes('lab');
+            const calcFunc = isLab ? 'calcLabFinancials' : 'calcBemFinancials';
+            
+            const tr = document.createElement('tr');
+            if (type === 'cost') {
+                tr.innerHTML = `
+                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent t-name" value="New Item" oninput="autoSave()"></td>
+                    <td class="px-4 py-2"><input type="number" class="w-full text-center border rounded p-1 t-qty" value="1" onchange="${calcFunc}(); autoSave()"></td>
+                    <td class="px-4 py-2"><input type="number" class="w-full text-right border rounded p-1 t-price" value="0" onchange="${calcFunc}(); autoSave()"></td>
+                    <td class="px-4 py-2 text-right bg-slate-50 font-bold t-total">₱0</td>
+                    <td class="px-4 py-2 text-center"><button onclick="removeRow(this, '${calcFunc}')" class="text-rose-500 font-bold hover:text-rose-700">&times;</button></td>
+                `;
+            } else if (type === 'roi') {
+                tr.innerHTML = `
+                    <td class="px-4 py-2"><input type="text" class="w-full border-b border-slate-200 focus:outline-none bg-transparent t-name" value="New Item" oninput="autoSave()"></td>
+                    <td class="px-4 py-2"><input type="number" class="w-full text-right border rounded p-1 t-price" value="0" onchange="${calcFunc}(); autoSave()"></td>
+                    <td class="px-4 py-2"><input type="number" class="w-full text-right border rounded p-1 t-cost" value="0" onchange="${calcFunc}(); autoSave()"></td>
+                    <td class="px-4 py-2"><input type="number" class="w-full text-right border rounded p-1 t-vol" value="0" onchange="${calcFunc}(); autoSave()"></td>
+                    <td class="px-4 py-2 text-right font-bold text-emerald-600 bg-emerald-50 t-margin">₱0</td>
+                    <td class="px-4 py-2 text-center"><button onclick="removeRow(this, '${calcFunc}')" class="text-rose-500 font-bold hover:text-rose-700">&times;</button></td>
+                `;
+            }
+            tbody.appendChild(tr);
+            window[calcFunc]();
+            autoSave();
         }
 
-        function calcROI() {
-            let dailyTotal = 0;
-            document.querySelectorAll('.calc-row').forEach(row => {
-                const p = parseFloat(row.querySelector('.price-input').value) || 0;
-                const c = parseFloat(row.querySelector('.cost-input').value) || 0;
-                const v = parseFloat(row.querySelector('.volume-input').value) || 0;
+        function removeRow(btn, calcFunc) {
+            btn.closest('tr').remove();
+            window[calcFunc]();
+            autoSave();
+        }
+
+        function readTable(tbodyId, type) {
+            const rows = document.getElementById(tbodyId).querySelectorAll('tr');
+            const data = [];
+            rows.forEach(row => {
+                if (type === 'cost') {
+                    data.push({
+                        name: row.querySelector('.t-name').value,
+                        qty: parseFloat(row.querySelector('.t-qty').value) || 0,
+                        price: parseFloat(row.querySelector('.t-price').value) || 0
+                    });
+                } else if (type === 'roi') {
+                    data.push({
+                        name: row.querySelector('.t-name').value,
+                        price: parseFloat(row.querySelector('.t-price').value) || 0,
+                        cost: parseFloat(row.querySelector('.t-cost').value) || 0,
+                        vol: parseFloat(row.querySelector('.t-vol').value) || 0
+                    });
+                }
+            });
+            return data;
+        }
+
+        // Financial Calculations
+        function calcTableCost(tbodyId, totalId) {
+            let total = 0;
+            document.getElementById(tbodyId).querySelectorAll('tr').forEach(row => {
+                const q = parseFloat(row.querySelector('.t-qty').value) || 0;
+                const p = parseFloat(row.querySelector('.t-price').value) || 0;
+                row.querySelector('.t-total').textContent = formatter.format(q * p);
+                total += (q * p);
+            });
+            document.getElementById(totalId).textContent = formatter.format(total);
+            return total;
+        }
+
+        function calcLabFinancials() {
+            calcTableCost('lab-costing-tbody', 'lab-setup-total');
+            const opexTotal = calcTableCost('lab-opex-tbody', 'lab-opex-total');
+            
+            let dailyRoi = 0;
+            document.getElementById('lab-roi-tbody').querySelectorAll('tr').forEach(row => {
+                const p = parseFloat(row.querySelector('.t-price').value) || 0;
+                const c = parseFloat(row.querySelector('.t-cost').value) || 0;
+                const v = parseFloat(row.querySelector('.t-vol').value) || 0;
                 const margin = (p - c) * v;
-                row.querySelector('.daily-margin').textContent = formatter.format(margin);
-                dailyTotal += margin;
+                row.querySelector('.t-margin').textContent = formatter.format(margin);
+                dailyRoi += margin;
             });
             
-            const annualGross = dailyTotal * 22 * 12;
-            document.getElementById('total-annual').textContent = formatter.format(annualGross);
-            
-            let opexTotal = 0;
-            document.querySelectorAll('.opex-row').forEach(row => {
-                opexTotal += (parseFloat(row.querySelector('.opex-qty').value) || 0) * (parseFloat(row.querySelector('.opex-price').value) || 0);
-            });
-            
-            document.getElementById('total-net-annual').textContent = formatter.format(annualGross - opexTotal);
+            const annualGross = dailyRoi * 22 * 12; // 22 working days/month
+            document.getElementById('lab-annual-total').textContent = formatter.format(annualGross);
+            document.getElementById('lab-net-total').textContent = formatter.format(annualGross - opexTotal);
         }
 
-        // --- Google Sheets Sync Logic ---
+        function calcBemFinancials() {
+            calcTableCost('bem-costing-tbody', 'bem-setup-total');
+            const opexTotal = calcTableCost('bem-opex-tbody', 'bem-opex-total');
+            
+            let dailyRoi = 0;
+            document.getElementById('bem-roi-tbody').querySelectorAll('tr').forEach(row => {
+                const p = parseFloat(row.querySelector('.t-price').value) || 0;
+                const c = parseFloat(row.querySelector('.t-cost').value) || 0;
+                const v = parseFloat(row.querySelector('.t-vol').value) || 0;
+                const margin = (p - c) * v;
+                row.querySelector('.t-margin').textContent = formatter.format(margin);
+                dailyRoi += margin;
+            });
+            
+            const annualGross = dailyRoi * 365; // BEmONC usually runs 24/7, 365 days
+            document.getElementById('bem-annual-total').textContent = formatter.format(annualGross);
+            document.getElementById('bem-net-total').textContent = formatter.format(annualGross - opexTotal);
+        }
+
+        // Google Sheets Sync Logic
         let saveTimeout;
 
         function autoSave() {
             updateProgressUI();
-            // Debounce saving so we don't spam the Apps Script URL
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(forceSave, 1500); 
         }
@@ -606,27 +814,32 @@
             const overlay = document.getElementById('sync-overlay');
             overlay.style.display = 'flex';
             
-            // Build JSON payload
             const payload = {
                 checkboxes: {},
-                inputs: {}
+                notes: {},
+                tables: {
+                    'lab-costing-tbody': readTable('lab-costing-tbody', 'cost'),
+                    'lab-opex-tbody': readTable('lab-opex-tbody', 'cost'),
+                    'lab-roi-tbody': readTable('lab-roi-tbody', 'roi'),
+                    'bem-costing-tbody': readTable('bem-costing-tbody', 'cost'),
+                    'bem-opex-tbody': readTable('bem-opex-tbody', 'cost'),
+                    'bem-roi-tbody': readTable('bem-roi-tbody', 'roi')
+                }
             };
 
-            // Grab all checkboxes
             document.querySelectorAll('input[type="checkbox"]').forEach(chk => {
                 if(chk.id) payload.checkboxes[chk.id] = chk.checked;
             });
 
-            // Grab all number inputs (costing, opex, ROI)
-            document.querySelectorAll('input[type="number"], input[type="text"]').forEach(inp => {
-                if(inp.id) payload.inputs[inp.id] = inp.value;
+            document.querySelectorAll('textarea').forEach(txt => {
+                if(txt.id) payload.notes[txt.id] = txt.value;
             });
 
             try {
-                const response = await fetch(GAS_URL, {
+                await fetch(GAS_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // Needed because simple GAS web apps don't handle preflight CORS well by default without specific headers. no-cors sends data but we can't read response.
-                    headers: { 'Content-Type': 'text/plain' }, // Send as plain text so GAS doPost(e) easily reads e.postData.contents
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify(payload)
                 });
                 console.log('Saved to Google Sheets.');
@@ -638,6 +851,7 @@
         }
 
         async function loadData() {
+            let hasLoadedData = false;
             try {
                 const response = await fetch(GAS_URL);
                 const rawData = await response.text();
@@ -645,29 +859,43 @@
                 if(rawData && rawData.trim() !== "") {
                     const data = JSON.parse(rawData);
                     
-                    // Restore Checkboxes
                     if(data.checkboxes) {
                         for(const [id, isChecked] of Object.entries(data.checkboxes)) {
                             const el = document.getElementById(id);
                             if(el) el.checked = isChecked;
                         }
                     }
-                    
-                    // Restore Inputs
-                    if(data.inputs) {
-                        for(const [id, val] of Object.entries(data.inputs)) {
+                    if(data.notes) {
+                        for(const [id, val] of Object.entries(data.notes)) {
                             const el = document.getElementById(id);
                             if(el) el.value = val;
                         }
                     }
+                    if(data.tables) {
+                        renderTable('lab-costing-tbody', 'cost', data.tables['lab-costing-tbody'] || defaultLabTables['lab-costing-tbody']);
+                        renderTable('lab-opex-tbody', 'cost', data.tables['lab-opex-tbody'] || defaultLabTables['lab-opex-tbody']);
+                        renderTable('lab-roi-tbody', 'roi', data.tables['lab-roi-tbody'] || defaultLabTables['lab-roi-tbody']);
+                        renderTable('bem-costing-tbody', 'cost', data.tables['bem-costing-tbody'] || defaultLabTables['bem-costing-tbody']);
+                        renderTable('bem-opex-tbody', 'cost', data.tables['bem-opex-tbody'] || defaultLabTables['bem-opex-tbody']);
+                        renderTable('bem-roi-tbody', 'roi', data.tables['bem-roi-tbody'] || defaultLabTables['bem-roi-tbody']);
+                        hasLoadedData = true;
+                    }
                 }
             } catch (err) {
-                console.log("No previous data found or sync error (First time load).", err);
+                console.log("No previous data found or sync error (First time load). Setting defaults.");
             }
             
-            // Recalculate everything after loading
-            calcSetup();
-            calcOpex();
+            if(!hasLoadedData) {
+                renderTable('lab-costing-tbody', 'cost', defaultLabTables['lab-costing-tbody']);
+                renderTable('lab-opex-tbody', 'cost', defaultLabTables['lab-opex-tbody']);
+                renderTable('lab-roi-tbody', 'roi', defaultLabTables['lab-roi-tbody']);
+                renderTable('bem-costing-tbody', 'cost', defaultLabTables['bem-costing-tbody']);
+                renderTable('bem-opex-tbody', 'cost', defaultLabTables['bem-opex-tbody']);
+                renderTable('bem-roi-tbody', 'roi', defaultLabTables['bem-roi-tbody']);
+            }
+
+            calcLabFinancials();
+            calcBemFinancials();
             updateProgressUI();
         }
 
